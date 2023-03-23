@@ -8,11 +8,12 @@ function Header() {
     <>
       <Navbar bg="dark" variant="dark">
         <Container>
-          <Navbar.Brand href="#home">HungryApp</Navbar.Brand>
+          <Navbar.Brand href="/">HungryApp</Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#features">Features</Nav.Link>
-            <Nav.Link href="#pricing">Pricing</Nav.Link>
+            <Nav.Link href="/">Home</Nav.Link>
+            <Nav.Link href="/map">Map</Nav.Link>
+            <Nav.Link href="/restaurants">Restaurants</Nav.Link>
+            <Nav.Link href="/tips">Tips</Nav.Link>
           </Nav>
         </Container>
       </Navbar>
