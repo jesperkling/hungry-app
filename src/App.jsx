@@ -18,7 +18,6 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <h1>Hungry App</h1>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/map" element={<Map />} />
