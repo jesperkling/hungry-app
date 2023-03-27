@@ -5,11 +5,11 @@ import "./App.css";
 import { Route, Routes } from "react-router-dom";
 
 // Pages
-import Home from "./pages/Home";
-import Map from "./pages/Map";
-import Restaurants from "./pages/Restaurants";
-import Restaurant from "./pages/Restaurant";
-import Tips from "./pages/Tips";
+import HomePage from "./pages/HomePage";
+import MapPage from "./pages/MapPage";
+import RestaurantsPage from "./pages/RestaurantsPage";
+import RestaurantPage from "./pages/RestaurantPage";
+import TipsPage from "./pages/TipsPage";
 
 // Components
 import Header from "./components/Header";
@@ -19,11 +19,11 @@ function App() {
     <div className="App">
       <Header />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/map" element={<Map />} />
-        <Route path="/restaurants" element={<Restaurants />} />
-        <Route path="/restaurants/:id" element={<Restaurant />} />
-        <Route path="/tips" element={<Tips />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/map" element={<MapPage />} />
+        <Route path="/restaurants" element={<RestaurantsPage />} />
+        <Route path="/restaurants/:id" element={<RestaurantPage />} />
+        <Route path="/tips" element={<TipsPage />} />
       </Routes>
     </div>
   );

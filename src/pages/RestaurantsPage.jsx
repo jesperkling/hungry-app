@@ -1,7 +1,7 @@
 import React from "react";
 
-function Restaurants() {
+function RestaurantsPage() {
   return <div>Restaurants</div>;
 }
 
-export default Restaurants;
+export default RestaurantsPage;

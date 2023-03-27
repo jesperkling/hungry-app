@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Form, Button, Container } from "react-bootstrap";
 
-function Tips() {
+function TipsPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [restaurant, setRestaurant] = useState("");
@@ -74,4 +74,4 @@ function Tips() {
   );
 }
 
-export default Tips;
+export default TipsPage;
