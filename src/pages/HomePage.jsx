@@ -2,7 +2,7 @@ import React from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-function Home() {
+function HomePage() {
   return (
     <Container fluid>
       <Row className="justify-content-center align-items-center">
@@ -29,4 +29,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default HomePage;
