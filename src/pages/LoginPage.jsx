@@ -21,7 +21,7 @@ function LoginPage() {
                   <Form.Control type="password" required />
                 </Form.Group>
 
-                <div className="p-2 text-center">
+                <div className="p-2">
                   <Button type="submit">Login</Button>
                 </div>
               </Form>
