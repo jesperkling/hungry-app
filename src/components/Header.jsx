@@ -2,25 +2,42 @@ import React from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+import { Link, NavLink } from "react-router-dom";
 
 function Header() {
   return (
-    <>
-      <Navbar bg="dark" variant="dark">
-        <Container>
-          <Nav className="mr-auto">
-            <Navbar.Brand href="/">HungryApp</Navbar.Brand>
-            <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="/map">Map</Nav.Link>
-            <Nav.Link href="/restaurants">Restaurants</Nav.Link>
-            <Nav.Link href="/tips">Tips</Nav.Link>
+    <Navbar collapseOnSelect bg="dark" variant="dark" expand="md">
+      <Container>
+        <Navbar.Brand as={Link} to="/">
+          HungryApp
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="ms-auto">
+            <>
+              <Nav.Link as={NavLink} end to="/">
+                Home
+              </Nav.Link>
+              <Nav.Link as={NavLink} end to="/map">
+                Map
+              </Nav.Link>
+              <Nav.Link as={NavLink} end to="/restaurants">
+                Restaurants
+              </Nav.Link>
+              <Nav.Link as={NavLink} end to="/tips">
+                Tips
+              </Nav.Link>
+              <Nav.Link as={NavLink} end to="/login">
+                Login
+              </Nav.Link>
+              <Nav.Link as={NavLink} end to="/logout">
+                Logout
+              </Nav.Link>
+            </>
           </Nav>
-          <Nav className="ml-auto">
-            <Nav.Link href="/login">Login</Nav.Link>
-          </Nav>
-        </Container>
-      </Navbar>
-    </>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 }
 
