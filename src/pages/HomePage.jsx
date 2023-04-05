@@ -11,15 +11,16 @@ function HomePage() {
           backgroundImage: 'url("../src/assets/images/bild-4.jpg")',
           backgroundSize: "cover",
           backgroundPosition: "center center",
-          minHeight: "100vh",
-          height: "100vh",
+          minHeight: "90vh",
+          height: "90vh",
+          paddingTop: "10px",
         }}
       >
         <Col
           xs={10}
           md={8}
           lg={6}
-          className="d-flex justify-content-center p-5"
+          className="d-flex justify-content-center p-3"
         >
           <Card className="p-5 text-center" style={{ opacity: 0.9 }}>
             <Card.Title
