@@ -8,8 +8,8 @@ function LogoutPage() {
         <Col>
           <Card>
             <Card.Body>
-              <Card.Title>Logout</Card.Title>
-              <p>You have been logged out.</p>
+              <Card.Title>Logga ut</Card.Title>
+              <p>Du är nu utloggad.</p>
             </Card.Body>
           </Card>
         </Col>

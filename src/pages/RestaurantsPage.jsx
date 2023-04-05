@@ -10,7 +10,7 @@ function RestaurantsPage() {
 
   return (
     <Container>
-      <h1>Restaurants</h1>
+      <h1>Matställen</h1>
       <ListGroup>
         {restaurants.map((restaurant) => (
           <ListGroup.Item key={restaurant.id}>

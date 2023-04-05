@@ -6,32 +6,37 @@ import { Link, NavLink } from "react-router-dom";
 
 function Header() {
   return (
-    <Navbar collapseOnSelect bg="dark" variant="dark" expand="md">
+    <Navbar collapseOnSelect bg="success" variant="dark" expand="md">
       <Container>
-        <Navbar.Brand as={Link} to="/">
-          HungryApp
+        <Navbar.Brand
+          as={Link}
+          to="/"
+          className="fw-bold"
+          style={{ letterSpacing: "2px" }}
+        >
+          Italifind
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="ms-auto">
             <>
               <Nav.Link as={NavLink} end to="/">
-                Home
+                Hem
               </Nav.Link>
               <Nav.Link as={NavLink} end to="/map">
-                Map
+                Karta
               </Nav.Link>
               <Nav.Link as={NavLink} end to="/restaurants">
-                Restaurants
+                Matställen
               </Nav.Link>
               <Nav.Link as={NavLink} end to="/tips">
                 Tips
               </Nav.Link>
               <Nav.Link as={NavLink} end to="/login">
-                Login
+                Logga in
               </Nav.Link>
               <Nav.Link as={NavLink} end to="/logout">
-                Logout
+                Logga ut
               </Nav.Link>
             </>
           </Nav>

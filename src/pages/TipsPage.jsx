@@ -22,10 +22,10 @@ function TipsPage() {
     <Container>
       <Form className="p-5" onSubmit={handleSubmit}>
         <Form.Group className="mb-3" controlId="formName">
-          <Form.Label>Name</Form.Label>
+          <Form.Label>Namn</Form.Label>
           <Form.Control
             type="text"
-            placeholder="Enter your name"
+            placeholder="Ditt namn..."
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
@@ -36,7 +36,7 @@ function TipsPage() {
           <Form.Label>Email</Form.Label>
           <Form.Control
             type="email"
-            placeholder="Enter your email"
+            placeholder="Din email..."
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -44,10 +44,10 @@ function TipsPage() {
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formRestaurant">
-          <Form.Label>Restaurant</Form.Label>
+          <Form.Label>Matställe</Form.Label>
           <Form.Control
             type="text"
-            placeholder="Enter the name of the restaurant"
+            placeholder="Namn på matställe..."
             value={restaurant}
             onChange={(e) => setRestaurant(e.target.value)}
             required
@@ -55,19 +55,19 @@ function TipsPage() {
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formTip">
-          <Form.Label>Tip</Form.Label>
+          <Form.Label>Tips</Form.Label>
           <Form.Control
             as="textarea"
             rows={3}
-            placeholder="Enter your tip"
+            placeholder="Skriv ditt tips här..."
             value={tip}
             onChange={(e) => setTip(e.target.value)}
             required
           />
         </Form.Group>
 
-        <Button variant="primary" type="submit">
-          Submit
+        <Button variant="danger" type="submit">
+          Skicka in
         </Button>
       </Form>
     </Container>

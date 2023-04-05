@@ -8,7 +8,7 @@ function LoginPage() {
         <Col>
           <Card>
             <Card.Body>
-              <Card.Title>Login</Card.Title>
+              <Card.Title>Logga in</Card.Title>
 
               <Form>
                 <Form.Group id="email">
@@ -17,12 +17,14 @@ function LoginPage() {
                 </Form.Group>
 
                 <Form.Group id="password">
-                  <Form.Label>Password</Form.Label>
+                  <Form.Label>Lösenord</Form.Label>
                   <Form.Control type="password" required />
                 </Form.Group>
 
                 <div className="p-2">
-                  <Button type="submit">Login</Button>
+                  <Button variant="danger" type="submit">
+                    Logga in
+                  </Button>
                 </div>
               </Form>
             </Card.Body>
