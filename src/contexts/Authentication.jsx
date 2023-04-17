@@ -34,9 +34,8 @@ const AuthContextProvider = ({ children }) => {
         return signOut(auth)
     }
 
-    // add auth-state observer 
 	useEffect(() => {
-		// listen for auth-state changes
+		// Listen to updates
 		const unsubscribe = onAuthStateChanged(auth, (user) => {
 			setCurrentUser(user)
 			setUserName(user?.displayName)
@@ -48,7 +47,6 @@ const AuthContextProvider = ({ children }) => {
 	}, [])
 
     const values = {
-        // everything the children needs
         currentUser,
 		signup,
         login,
