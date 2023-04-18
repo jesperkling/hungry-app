@@ -11,7 +11,8 @@
   "dependencies": {
     "@react-google-maps/api": "^2.18.1",
     "bootstrap": "^5.2.3",
-    "firebase": "^9.19.1",
+    "firebase": "^9.20.0",
+    "firestore": "^1.1.6",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.2",
     "react-dom": "^18.2.0",

@@ -26,7 +26,7 @@ function Header() {
               <Nav.Link as={NavLink} end to="/map">
                 Karta
               </Nav.Link>
-              <Nav.Link as={NavLink} end to="/restaurants">
+              <Nav.Link as={NavLink} end to="/places">
                 Matställen
               </Nav.Link>
               <Nav.Link as={NavLink} end to="/tips">

@@ -1,26 +1,38 @@
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Container, ListGroup } from "react-bootstrap";
+import { collection, getDocs } from "firebase/firestore";
+import { database } from "../firebase/index";
 
 function RestaurantsPage() {
-  const restaurants = [
-    { id: 1, name: "Restaurant A" },
-    { id: 2, name: "Restaurant B" },
-    { id: 3, name: "Restaurant C" },
-  ];
+  const [places, setPlaces] = useState([]);
+
+  useEffect(() => {
+    async function getPlaces() {
+      const placesRef = collection(database, "places");
+      const snapshots = await getDocs(placesRef);
+      const places = snapshots.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setPlaces(places);
+    }
+    getPlaces();
+  }, []);
 
   return (
     <Container>
       <h1>Matställen</h1>
       <ListGroup>
-        {restaurants.map((restaurant) => (
-          <ListGroup.Item key={restaurant.id}>
+        {places.map((place) => (
+          <ListGroup.Item key={place.id}>
             <Link
               to={{
-                pathname: `/restaurants/${restaurant.id}`,
-                search: `name=${restaurant.name}`,
+                pathname: `/places/${place.id}`,
+                search: `name=${place.namn}`,
               }}
             >
-              {restaurant.name}
+              {place.namn}
             </Link>
           </ListGroup.Item>
         ))}
