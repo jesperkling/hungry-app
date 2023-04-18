@@ -1,21 +1,29 @@
 import React, { useState } from "react";
 import { Form, Button, Container } from "react-bootstrap";
+import { collection, addDoc } from "firebase/firestore";
+import { database } from "../firebase";
 
 function TipsPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [restaurant, setRestaurant] = useState("");
-  const [tip, setTip] = useState("");
+  const [tips, setTips] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(
-      `Name: ${name} Email: ${email} Restaurant: ${restaurant} Tip: ${tip}`
-    );
-    setName("");
-    setEmail("");
-    setRestaurant("");
-    setTip("");
+
+    try {
+      await addDoc(collection(database, "tips"), {
+        name: name,
+        email: email,
+        tips: tips,
+      });
+      alert("Tack för ditt tips!");
+      setName("");
+      setEmail("");
+      setTips("");
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
   };
 
   return (
@@ -43,25 +51,14 @@ function TipsPage() {
           />
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="formRestaurant">
-          <Form.Label>Matställe</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Namn på matställe..."
-            value={restaurant}
-            onChange={(e) => setRestaurant(e.target.value)}
-            required
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="formTip">
+        <Form.Group className="mb-3" controlId="formTips">
           <Form.Label>Tips</Form.Label>
           <Form.Control
             as="textarea"
             rows={3}
             placeholder="Skriv ditt tips här..."
-            value={tip}
-            onChange={(e) => setTip(e.target.value)}
+            value={tips}
+            onChange={(e) => setTips(e.target.value)}
             required
           />
         </Form.Group>
