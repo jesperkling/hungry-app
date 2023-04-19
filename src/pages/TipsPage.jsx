@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Button, Container } from "react-bootstrap";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, getDocs } from "firebase/firestore";
 import { database } from "../firebase";
 
 function TipsPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [tips, setTips] = useState("");
+  const [tipsList, setTipsList] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,6 +26,21 @@ function TipsPage() {
       console.error("Error adding document: ", error);
     }
   };
+
+  // update tipsList
+  useEffect(() => {
+    async function getTips() {
+      const tipsRef = collection(database, "tips");
+      const snapshots = await getDocs(tipsRef);
+      const tips = snapshots.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      console.log(tips);
+      setTipsList(tips);
+    }
+    getTips();
+  }, []);
 
   return (
     <Container>
@@ -67,6 +83,14 @@ function TipsPage() {
           Skicka in
         </Button>
       </Form>
+      <Container>
+        <h3>Senaste Tipsen</h3>
+        <ul>
+          {tipsList.slice(0, 5).map((tip) => (
+            <li key={tip.id}>{tip.tips}</li>
+          ))}
+        </ul>
+      </Container>
     </Container>
   );
 }
