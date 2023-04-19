@@ -10,13 +10,11 @@ function LogoutPage() {
   useEffect(() => {
     const handleLogout = async () => {
       if (currentUser) {
-        console.log("currentUser logged in", currentUser);
         await logout();
         navigate("/logout");
       }
     };
     handleLogout();
-    console.log("currentUser logged out", currentUser);
   }, [currentUser, logout, history]);
 
   return (
