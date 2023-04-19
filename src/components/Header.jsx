@@ -38,6 +38,9 @@ function Header() {
               <Nav.Link as={NavLink} end to="/logout">
                 Logga ut
               </Nav.Link>
+              <Nav.Link as={NavLink} end to="/signup">
+                Registrera
+              </Nav.Link>
             </>
           </Nav>
         </Navbar.Collapse>

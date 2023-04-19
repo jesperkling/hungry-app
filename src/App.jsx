@@ -12,6 +12,7 @@ import MapPage from "./pages/MapPage";
 import RestaurantsPage from "./pages/RestaurantsPage";
 import RestaurantPage from "./pages/RestaurantPage";
 import TipsPage from "./pages/TipsPage";
+import SignUpPage from "./pages/SignUpPage";
 
 // Components
 import Header from "./components/Header";
@@ -29,6 +30,7 @@ function App() {
         <Route path="/tips" element={<TipsPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/logout" element={<LogoutPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
       </Routes>
       <Footer />
     </div>
