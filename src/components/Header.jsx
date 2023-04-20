@@ -3,8 +3,11 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { Link, NavLink } from "react-router-dom";
+import { useAuthContext } from "../contexts/Authentication";
 
 function Header() {
+  const { currentUser } = useAuthContext();
+
   return (
     <Navbar collapseOnSelect bg="success" variant="dark" expand="md">
       <Container>
@@ -32,15 +35,16 @@ function Header() {
               <Nav.Link as={NavLink} end to="/tips">
                 Tips
               </Nav.Link>
-              <Nav.Link as={NavLink} end to="/login">
-                Logga in
-              </Nav.Link>
-              <Nav.Link as={NavLink} end to="/logout">
-                Logga ut
-              </Nav.Link>
-              <Nav.Link as={NavLink} end to="/signup">
-                Registrera
-              </Nav.Link>
+              {!currentUser && (
+                <Nav.Link as={NavLink} end to="/login">
+                  Logga in
+                </Nav.Link>
+              )}
+              {currentUser && (
+                <Nav.Link as={NavLink} end to="/logout">
+                  Logga ut
+                </Nav.Link>
+              )}
             </>
           </Nav>
         </Navbar.Collapse>

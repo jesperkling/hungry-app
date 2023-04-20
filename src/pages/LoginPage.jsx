@@ -1,30 +1,37 @@
 import React, { useRef, useState } from "react";
-import { Alert, Button, Card, Container, Col, Form, Row } from "react-bootstrap";
-import { useAuthContext } from "../contexts/Authentication"
-import { useNavigate } from "react-router-dom"
+import {
+  Alert,
+  Button,
+  Card,
+  Container,
+  Col,
+  Form,
+  Row,
+} from "react-bootstrap";
+import { useAuthContext } from "../contexts/Authentication";
+import { useNavigate, Link } from "react-router-dom";
 
 function LoginPage() {
-  const emailRef = useRef()
-	const passwordRef = useRef()
-	const [error, setError] = useState(null)
-	const [loading, setLoading] = useState(false)
-	const { login } = useAuthContext()
-	const navigate = useNavigate()
+  const emailRef = useRef();
+  const passwordRef = useRef();
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const { login } = useAuthContext();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-		e.preventDefault()
-		setError(null);
+    e.preventDefault();
+    setError(null);
 
-		try {
-			setLoading(true)
-			await login(emailRef.current.value, passwordRef.current.value)
-			navigate('/')
-
-		} catch (err) {
-			setError(err.message)
-			setLoading(false)
-		}
-	}
+    try {
+      setLoading(true);
+      await login(emailRef.current.value, passwordRef.current.value);
+      navigate("/");
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
 
   return (
     <Container>
@@ -34,7 +41,7 @@ function LoginPage() {
             <Card.Body>
               <Card.Title>Logga in</Card.Title>
 
-              {error && (<Alert variant="danger">{error}</Alert>)}
+              {error && <Alert variant="danger">{error}</Alert>}
 
               <Form onSubmit={handleSubmit}>
                 <Form.Group id="email">
@@ -57,6 +64,9 @@ function LoginPage() {
           </Card>
         </Col>
       </Row>
+      <div className="text-center mt-3">
+        Inte medlem? Registrera dig <Link to="/signup">här</Link>
+      </div>
     </Container>
   );
 }
