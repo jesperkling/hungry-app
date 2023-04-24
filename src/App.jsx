@@ -13,10 +13,12 @@ import RestaurantsPage from "./pages/RestaurantsPage";
 import RestaurantPage from "./pages/RestaurantPage";
 import TipsPage from "./pages/TipsPage";
 import SignUpPage from "./pages/SignUpPage";
+import AdminPage from "./pages/AdminPage";
 
 // Components
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import AdminRoute from "./components/AdminRoute";
 
 function App() {
   return (
@@ -31,6 +33,14 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/logout" element={<LogoutPage />} />
         <Route path="/signup" element={<SignUpPage />} />
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <AdminPage />
+            </AdminRoute>
+          }
+        />
       </Routes>
       <Footer />
     </div>
