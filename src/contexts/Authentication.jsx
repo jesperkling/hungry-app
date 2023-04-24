@@ -6,7 +6,7 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc, collection, getDocs } from "firebase/firestore";
 
 const AuthContext = createContext();
 
@@ -40,6 +40,14 @@ const AuthContextProvider = ({ children }) => {
     return signOut(auth);
   };
 
+  const getAllUsers = async () => {
+    const usersRef = collection(database, "users");
+    const usersSnap = await getDocs(usersRef);
+    const users = usersSnap.docs.map((doc) => doc.data());
+    console.log(users);
+    return users;
+  };
+
   useEffect(() => {
     // Listen to updates
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -69,6 +77,7 @@ const AuthContextProvider = ({ children }) => {
     userName,
     userEmail,
     admin,
+    getAllUsers,
   };
 
   return (
