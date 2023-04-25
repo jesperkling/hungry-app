@@ -6,7 +6,7 @@ import { Link, NavLink } from "react-router-dom";
 import { useAuthContext } from "../contexts/Authentication";
 
 function Header() {
-  const { currentUser } = useAuthContext();
+  const { currentUser, admin } = useAuthContext();
 
   return (
     <Navbar collapseOnSelect bg="success" variant="dark" expand="md">
@@ -40,15 +40,20 @@ function Header() {
                   Logga in
                 </Nav.Link>
               )}
-              {currentUser && (
+              {admin && (
                 <>
                   <Nav.Link as={NavLink} end to="/admin">
                     Admin
                   </Nav.Link>
-                  <Nav.Link as={NavLink} end to="/logout">
-                    Logga ut
+                  <Nav.Link as={NavLink} end to="/admin/edit">
+                    Redigera
                   </Nav.Link>
                 </>
+              )}
+              {currentUser && (
+                <Nav.Link as={NavLink} end to="/logout">
+                  Logga ut
+                </Nav.Link>
               )}
             </>
           </Nav>

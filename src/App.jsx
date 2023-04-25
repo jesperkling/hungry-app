@@ -14,6 +14,7 @@ import RestaurantPage from "./pages/RestaurantPage";
 import TipsPage from "./pages/TipsPage";
 import SignUpPage from "./pages/SignUpPage";
 import AdminPage from "./pages/AdminPage";
+import EditPage from "./pages/EditPage";
 
 // Components
 import Header from "./components/Header";
@@ -38,6 +39,14 @@ function App() {
           element={
             <AdminRoute>
               <AdminPage />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/edit"
+          element={
+            <AdminRoute>
+              <EditPage />
             </AdminRoute>
           }
         />
