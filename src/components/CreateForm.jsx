@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Button, Container } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import { collection, addDoc } from "firebase/firestore";
 import { database } from "../firebase";
 import { useAuthContext } from "../contexts/Authentication";
@@ -24,21 +24,38 @@ const CreateForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     alert("Skapar nytt matställe...");
-    console.log(name);
-    console.log(streetName);
-    console.log(streetNumber);
-    console.log(postcode);
-    console.log(city);
-    console.log(description);
-    console.log(cuisine);
-    console.log(category);
-    console.log(offers);
-    console.log(email);
-    console.log(website);
-    console.log(phone);
-    console.log(facebook);
-    console.log(instagram);
 
+    const newPlace = {
+      name,
+      streetName,
+      streetNumber,
+      postcode,
+      city,
+      description,
+      cuisine,
+      category,
+      offers,
+      email,
+      website,
+      phone,
+      facebook,
+      instagram,
+    };
+
+    try {
+      const docRefResult = await addDoc(
+        collection(database, "places"),
+        newPlace
+      );
+      console.log("Document written with ID: ", docRefResult.id);
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
+
+    handleReset();
+  };
+
+  const handleReset = () => {
     setName("");
     setStreetName("");
     setStreetNumber("");
@@ -53,16 +70,6 @@ const CreateForm = () => {
     setPhone("");
     setFacebook("");
     setInstagram("");
-  };
-
-  const handleReset = () => {
-    setName("");
-    setStreetName("");
-    setStreetNumber("");
-    setPostcode("");
-    setCity("");
-    setDescription("");
-    setCuisine("");
   };
 
   return (
