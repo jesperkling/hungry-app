@@ -6,18 +6,18 @@ import { useAuthContext } from "../contexts/Authentication";
 
 const CreateForm = () => {
   const { currentUser } = useAuthContext();
-  const [name, setName] = useState("");
-  const [streetName, setStreetName] = useState("");
-  const [streetNumber, setStreetNumber] = useState("");
-  const [postcode, setPostcode] = useState("");
-  const [city, setCity] = useState("");
-  const [description, setDescription] = useState("");
+  const [namn, setNamn] = useState("");
+  const [gatuadress, setGatuadress] = useState("");
+  const [gatunummer, setGatunummer] = useState("");
+  const [postnummer, setPostnummer] = useState("");
+  const [ort, setOrt] = useState("");
+  const [beskrivning, setBeskrivning] = useState("");
   const [cuisine, setCuisine] = useState("");
-  const [category, setCategory] = useState("");
-  const [offers, setOffers] = useState("");
-  const [email, setEmail] = useState("");
-  const [website, setWebsite] = useState("");
-  const [phone, setPhone] = useState("");
+  const [typ, setTyp] = useState("");
+  const [utbud, setUtbud] = useState("");
+  const [epost, setEpost] = useState("");
+  const [hemsida, setHemsida] = useState("");
+  const [telefon, setTelefon] = useState("");
   const [facebook, setFacebook] = useState("");
   const [instagram, setInstagram] = useState("");
 
@@ -26,18 +26,18 @@ const CreateForm = () => {
     alert("Skapar nytt matställe...");
 
     const newPlace = {
-      name,
-      streetName,
-      streetNumber,
-      postcode,
-      city,
-      description,
+      namn,
+      gatuadress,
+      gatunummer,
+      postnummer,
+      ort,
+      beskrivning,
       cuisine,
-      category,
-      offers,
-      email,
-      website,
-      phone,
+      typ,
+      utbud,
+      epost,
+      hemsida,
+      telefon,
       facebook,
       instagram,
     };
@@ -56,18 +56,18 @@ const CreateForm = () => {
   };
 
   const handleReset = () => {
-    setName("");
-    setStreetName("");
-    setStreetNumber("");
-    setPostcode("");
-    setCity("");
-    setDescription("");
+    setNamn("");
+    setGatuadress("");
+    setGatunummer("");
+    setPostnummer("");
+    setOrt("");
+    setBeskrivning("");
     setCuisine("");
-    setCategory("");
-    setOffers("");
-    setEmail("");
-    setWebsite("");
-    setPhone("");
+    setTyp("");
+    setUtbud("");
+    setEpost("");
+    setHemsida("");
+    setTelefon("");
     setFacebook("");
     setInstagram("");
   };
@@ -75,62 +75,62 @@ const CreateForm = () => {
   return (
     <div style={{ overflow: "auto" }}>
       <Form className="p-5" onSubmit={handleSubmit}>
-        <Form.Group className="mb-2" controlId="name">
+        <Form.Group className="mb-2" controlId="namn">
           <Form.Control
             type="text"
             placeholder="Namn..."
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={namn}
+            onChange={(e) => setNamn(e.target.value)}
             required
           />
         </Form.Group>
 
-        <Form.Group className="mb-2" controlId="streetName">
+        <Form.Group className="mb-2" controlId="gatuadress">
           <Form.Control
             type="text"
             placeholder="Gatuadress..."
-            value={streetName}
-            onChange={(e) => setStreetName(e.target.value)}
+            value={gatuadress}
+            onChange={(e) => setGatuadress(e.target.value)}
             required
           />
         </Form.Group>
 
-        <Form.Group className="mb-2" controlId="streetNumber">
+        <Form.Group className="mb-2" controlId="gatunummer">
           <Form.Control
             type="number"
             placeholder="Gatunummer..."
-            value={streetNumber}
-            onChange={(e) => setStreetNumber(e.target.value)}
+            value={gatunummer}
+            onChange={(e) => setGatunummer(e.target.value)}
             required
           />
         </Form.Group>
 
-        <Form.Group className="mb-2" controlId="postcode">
+        <Form.Group className="mb-2" controlId="postnummer">
           <Form.Control
             type="number"
             placeholder="Postnummer..."
-            value={postcode}
-            onChange={(e) => setPostcode(e.target.value)}
+            value={postnummer}
+            onChange={(e) => setPostnummer(e.target.value)}
             required
           />
         </Form.Group>
 
-        <Form.Group className="mb-2" controlId="city">
+        <Form.Group className="mb-2" controlId="ort">
           <Form.Control
             type="text"
             placeholder="Ort..."
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
+            value={ort}
+            onChange={(e) => setOrt(e.target.value)}
             required
           />
         </Form.Group>
 
-        <Form.Group className="mb-2" controlId="description">
+        <Form.Group className="mb-2" controlId="beskrivning">
           <Form.Control
             type="text"
             placeholder="Beskrivning..."
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            value={beskrivning}
+            onChange={(e) => setBeskrivning(e.target.value)}
             required
           />
         </Form.Group>
@@ -145,24 +145,18 @@ const CreateForm = () => {
           />
         </Form.Group>
 
-        <Form.Group className="mb-2" controlId="category">
-          <Form.Select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          >
+        <Form.Group className="mb-2" controlId="typ">
+          <Form.Select value={typ} onChange={(e) => setTyp(e.target.value)}>
             <option>Välj kategori...</option>
-            <option value="restaurant">Restaurant</option>
+            <option value="restaurang">Restaurang</option>
             <option value="cafe">Café</option>
             <option value="fast-food">Fast Food</option>
             <option value="food-truck">Food Truck</option>
           </Form.Select>
         </Form.Group>
 
-        <Form.Group className="mb-2" controlId="offers">
-          <Form.Select
-            value={offers}
-            onChange={(e) => setOffers(e.target.value)}
-          >
+        <Form.Group className="mb-2" controlId="utbud">
+          <Form.Select value={utbud} onChange={(e) => setUtbud(e.target.value)}>
             <option>Välj utbud...</option>
             <option value="lunch">Lunch</option>
             <option value="after-work">After Work</option>
@@ -170,30 +164,30 @@ const CreateForm = () => {
           </Form.Select>
         </Form.Group>
 
-        <Form.Group className="mb-2" controlId="email">
+        <Form.Group className="mb-2" controlId="e-post">
           <Form.Control
             type="email"
             placeholder="E-Post..."
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={epost}
+            onChange={(e) => setEpost(e.target.value)}
           />
         </Form.Group>
 
-        <Form.Group className="mb-2" controlId="website">
+        <Form.Group className="mb-2" controlId="hemsida">
           <Form.Control
             type="text"
             placeholder="Hemsida..."
-            value={website}
-            onChange={(e) => setWebsite(e.target.value)}
+            value={hemsida}
+            onChange={(e) => setHemsida(e.target.value)}
           />
         </Form.Group>
 
-        <Form.Group className="mb-2" controlId="phone">
+        <Form.Group className="mb-2" controlId="telefon">
           <Form.Control
             type="number"
             placeholder="Telefonnummer..."
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            value={telefon}
+            onChange={(e) => setTelefon(e.target.value)}
           />
         </Form.Group>
 
