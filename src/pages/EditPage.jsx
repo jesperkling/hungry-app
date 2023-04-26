@@ -1,13 +1,50 @@
-import React, { useState, useEffect } from "react";
-import { Container, Button, ListGroup } from "react-bootstrap";
+import React, { useState, useEffect, useMemo } from "react";
+import { Container, Button, ListGroup, Table } from "react-bootstrap";
 import CreateForm from "../components/CreateForm";
 import { collection, getDocs } from "@firebase/firestore";
 import { database } from "../firebase";
+import { useTable, useSortBy } from "react-table";
 
 function EditPage() {
   const [createPlace, setCreatePlace] = useState(false);
   const [editPlace, setEditPlace] = useState(false);
   const [places, setPlaces] = useState([]);
+  const data = useMemo(() => places, [places]);
+
+  const columns = useMemo(
+    () => [
+      {
+        Header: "Namn",
+        accessor: "namn",
+      },
+      {
+        Header: "Gatuadress",
+        accessor: "gatuadress",
+      },
+      {
+        Header: "Ort",
+        accessor: "ort",
+      },
+      {
+        Header: "Typ",
+        accessor: "typ",
+      },
+      {
+        Header: "",
+        accessor: "edit",
+        Cell: ({ row }) =>
+          row.id ? (
+            <Button onClick={() => console.log(row.id)}>Redigera</Button>
+          ) : null,
+      },
+    ],
+    []
+  );
+
+  const tableInstance = useTable({ columns, data }, useSortBy);
+
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    tableInstance;
 
   const handleCreatePlace = () => {
     setCreatePlace(true);
@@ -49,19 +86,46 @@ function EditPage() {
         {editPlace && (
           <div className="text-center">
             <h1>Redigera matställe</h1>
-            <ListGroup>
-              {places.map((place) => (
-                <ListGroup.Item key={place.id}>
-                  {place.namn} - {place.typ} - {place.utbud}
-                  <Button variant="primary" size="sm" className="mx-2">
-                    Redigera
-                  </Button>
-                  <Button variant="danger" size="sm">
-                    Ta bort
-                  </Button>
-                </ListGroup.Item>
-              ))}
-            </ListGroup>
+            <Table {...getTableProps()}>
+              <thead>
+                {headerGroups.map((headerGroup) => (
+                  <tr {...headerGroup.getHeaderGroupProps()}>
+                    {headerGroup.headers.map((column) => (
+                      <th
+                        {...column.getHeaderProps(
+                          column.getSortByToggleProps()
+                        )}
+                      >
+                        {column.render("Header")}{" "}
+                        <span>
+                          {column.isSorted
+                            ? column.isSortedDesc
+                              ? " 🔽"
+                              : " 🔼"
+                            : ""}
+                        </span>
+                      </th>
+                    ))}
+                  </tr>
+                ))}
+              </thead>
+              <tbody {...getTableBodyProps()}>
+                {rows.map((row) => {
+                  prepareRow(row);
+                  return (
+                    <tr {...row.getRowProps()}>
+                      {row.cells.map((cell) => {
+                        return (
+                          <td {...cell.getCellProps()}>
+                            {cell.render("Cell")}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </Table>
           </div>
         )}
       </Container>
