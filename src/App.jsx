@@ -15,6 +15,7 @@ import TipsPage from "./pages/TipsPage";
 import SignUpPage from "./pages/SignUpPage";
 import AdminPage from "./pages/AdminPage";
 import EditPage from "./pages/EditPage";
+import EditPlacePage from "./pages/EditPlacePage";
 
 // Components
 import Header from "./components/Header";
@@ -50,8 +51,16 @@ function App() {
             </AdminRoute>
           }
         />
+        <Route
+          path="/admin/edit/:id"
+          element={
+            <AdminRoute>
+              <EditPlacePage />
+            </AdminRoute>
+          }
+        />
       </Routes>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

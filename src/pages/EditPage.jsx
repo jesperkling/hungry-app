@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Container, Button, ListGroup, Table } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import CreateForm from "../components/CreateForm";
 import { collection, getDocs } from "@firebase/firestore";
 import { database } from "../firebase";
@@ -18,7 +19,11 @@ function EditPage() {
         Header: "",
         accessor: "edit",
         Cell: ({ row }) =>
-          row.id ? <AiFillEdit onClick={() => console.log(row.id)} /> : null,
+          row.id ? (
+            <Link to={`/admin/edit/${row.original.id}`}>
+              <AiFillEdit />
+            </Link>
+          ) : null,
       },
       {
         Header: "Namn",
@@ -59,7 +64,10 @@ function EditPage() {
     const getPlaces = async () => {
       const placesCollection = collection(database, "places");
       const placesSnapshot = await getDocs(placesCollection);
-      const placesList = placesSnapshot.docs.map((doc) => doc.data());
+      const placesList = placesSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
       setPlaces(placesList);
     };
     getPlaces();
