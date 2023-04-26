@@ -2,12 +2,31 @@ import React, { useEffect, useState } from "react";
 import { useAuthContext } from "../contexts/Authentication";
 import { useTable, useSortBy } from "react-table";
 import { Container, Table } from "react-bootstrap";
+import { FaUserCircle } from "react-icons/fa";
 
 function AdminPage() {
   const [data, setData] = useState([]);
   const { getAllUsers } = useAuthContext();
   const columns = React.useMemo(
     () => [
+      {
+        Header: "Profile Picture",
+        accessor: "profilePicture",
+        Cell: ({ cell: { value } }) => (
+          <div className="profile-picture-cell">
+            {value ? (
+              <img
+                src={value}
+                alt="Profile"
+                className="profile-picture"
+                style={{ width: "50px", height: "50px" }}
+              />
+            ) : (
+              <FaUserCircle size={32} />
+            )}
+          </div>
+        ),
+      },
       {
         Header: "Name",
         accessor: "name",
@@ -42,6 +61,7 @@ function AdminPage() {
       console.log(users);
       if (users) {
         const userData = users.map((users) => ({
+          profilePicture: users.photoURL,
           name: users.name,
           email: users.email,
           admin: users.admin,
