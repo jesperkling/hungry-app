@@ -4,6 +4,7 @@ import CreateForm from "../components/CreateForm";
 import { collection, getDocs } from "@firebase/firestore";
 import { database } from "../firebase";
 import { useTable, useSortBy } from "react-table";
+import { AiFillEdit } from "react-icons/ai";
 
 function EditPage() {
   const [createPlace, setCreatePlace] = useState(false);
@@ -13,6 +14,12 @@ function EditPage() {
 
   const columns = useMemo(
     () => [
+      {
+        Header: "",
+        accessor: "edit",
+        Cell: ({ row }) =>
+          row.id ? <AiFillEdit onClick={() => console.log(row.id)} /> : null,
+      },
       {
         Header: "Namn",
         accessor: "namn",
@@ -28,14 +35,6 @@ function EditPage() {
       {
         Header: "Typ",
         accessor: "typ",
-      },
-      {
-        Header: "",
-        accessor: "edit",
-        Cell: ({ row }) =>
-          row.id ? (
-            <Button onClick={() => console.log(row.id)}>Redigera</Button>
-          ) : null,
       },
     ],
     []
