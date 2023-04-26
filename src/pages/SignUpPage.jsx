@@ -9,9 +9,20 @@ const SignupPage = () => {
 	const passwordRef = useRef()
 	const passwordConfirmRef = useRef()
 	const [error, setError] = useState(null)
+	const [photo, setPhoto] = useState(false)
 	const [loading, setLoading] = useState(false)
 	const { signup } = useAuthContext()
 	const navigate = useNavigate()
+
+	const handleFile = (e) => {
+		if (!e.target.files.length) {
+			setPhoto(null)
+			return
+		}
+
+		setPhoto(e.target.files[0])
+		console.log("Changes in file:", e.target.files[0])
+	}
 
 	const handleSubmit = async (e) => {
 		e.preventDefault()
@@ -25,7 +36,7 @@ const SignupPage = () => {
 
 		try {
 			setLoading(true)
-            await signup(emailRef.current.value, passwordRef.current.value, displayNameRef.current.value)
+            await signup(emailRef.current.value, passwordRef.current.value, displayNameRef.current.value, photo)
 			navigate('/')
 
 		} catch (err) {
@@ -43,6 +54,17 @@ const SignupPage = () => {
 							<Card.Title className="mb-3">Sign Up</Card.Title>
 							{error && (<Alert variant="danger">{error}</Alert>)}
 							<Form onSubmit={handleSubmit}>
+								<Form.Group id="photo" className="mb-3">
+									<Form.Label>Photo</Form.Label>
+									<Form.Control type="file" onChange={handleFile} />
+									<Form.Text>
+										{
+											photo
+												? `${photo.name} (${Math.round(photo.size/1024)} kB)`
+												: 'No Photo'
+										}
+									</Form.Text>
+								</Form.Group>
 								<Form.Group id="displayName" className="mb-3">
 									<Form.Label>Name</Form.Label>
 									<Form.Control type="text" ref={displayNameRef} required/>
