@@ -27,13 +27,10 @@ const SearchBar = ({ onSubmit }) => {
   };
   return (
     <>
-      <Row className="m-2">
-        <Col xs={12} md={6} lg={4}>
+      <Row>
+        <Col xs={12} sm={6} md={6} lg={6} xl={6}>
           <InputGroup>
-            <Form
-              onSubmit={handleSubmit}
-              className="d-flex flex-row mt-2 border border-2 rounded"
-            >
+            <Form className="d-flex" onSubmit={handleSubmit}>
               <Form.Group>
                 <Autocomplete>
                   <Form.Control
@@ -44,23 +41,19 @@ const SearchBar = ({ onSubmit }) => {
                   />
                 </Autocomplete>
               </Form.Group>
-              <Button type="submit" variant="light">
+              <Button className="border" type="submit" variant="light">
                 <FaSearch />
               </Button>
             </Form>
           </InputGroup>
         </Col>
-        <Col
-          xs={12}
-          md={6}
-          lg={8}
-          className="d-flex justify-content-md-end mt-2 mt-md-0"
-        >
-          <ButtonGroup className="mx-2 border border-2 mt-2">
+        <Col xs={12} sm={6} md={6} lg={6} xl={6}>
+          <ButtonGroup>
             <DropdownButton
               as={ButtonGroup}
               title="Typ av matställe"
               variant="light"
+              className="border"
             >
               <Dropdown.Item href="#">Café</Dropdown.Item>
               <Dropdown.Item href="#">Restaurang</Dropdown.Item>
@@ -70,23 +63,18 @@ const SearchBar = ({ onSubmit }) => {
             </DropdownButton>
           </ButtonGroup>
 
-          <ButtonGroup className="mx-2 border border-2 mt-2">
-            <DropdownButton as={ButtonGroup} title="Utbud" variant="light">
+          <ButtonGroup>
+            <DropdownButton
+              as={ButtonGroup}
+              title="Utbud"
+              variant="light"
+              className="border"
+            >
               <Dropdown.Item href="#">Lunch</Dropdown.Item>
               <Dropdown.Item href="#">After Work</Dropdown.Item>
               <Dropdown.Item href="#">Middag</Dropdown.Item>
             </DropdownButton>
           </ButtonGroup>
-
-          <div>
-            <Image
-              height={40}
-              width={40}
-              fluid
-              className="bg-dark mt-2"
-              roundedCircle
-            />
-          </div>
         </Col>
       </Row>
     </>

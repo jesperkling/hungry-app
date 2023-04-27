@@ -4,10 +4,11 @@ import SearchBar from "./SearchBar";
 import { useQuery } from "react-query";
 import MapAPI from "../services/GMapsAPI";
 import UsersLocation from "./UsersLocation";
+import { Col, Row } from "react-bootstrap";
 
 const containerStyle = {
   width: "100vw",
-  height: "100vh",
+  height: "80vh",
 };
 
 const center = {
@@ -24,7 +25,7 @@ const Map = () => {
   const { isLoaded } = useLoadScript({
     id: "google-map-script",
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_API_KEY,
-    libraries,
+    libraries: libraries,
   });
 
   const [map, setMap] = useState(null);
@@ -46,7 +47,7 @@ const Map = () => {
     }
     const coordinates = await MapAPI.getLatLng(address);
     console.log(coordinates);
-    map.panTo(coordinates);
+    map?.panTo(coordinates);
     setUserPosition(coordinates);
   };
 
@@ -69,9 +70,6 @@ const Map = () => {
 
   return isLoaded ? (
     <>
-      <div className="d-flex justify-content-center">
-        <UsersLocation usersLocation={panToLocation} />
-      </div>
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={userPosition}
@@ -84,9 +82,19 @@ const Map = () => {
         }}
       >
         <Marker position={userPosition} />
-        <SearchBar onSubmit={handleOnSubmit} />
+        {usersLocation && (
+          <Marker
+            position={{ lat: usersLocation.lat, lng: usersLocation.lng }}
+          />
+        )}
         <></>
       </GoogleMap>
+      <Row>
+        <Col className="d-flex">
+          <SearchBar onSubmit={handleOnSubmit} />
+          <UsersLocation usersLocation={panToLocation} />
+        </Col>
+      </Row>
     </>
   ) : (
     <></>
