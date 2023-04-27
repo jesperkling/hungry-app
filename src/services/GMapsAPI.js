@@ -1,4 +1,4 @@
-const API_KEY = AIzaSyC8tTF6jG6YKvKilp1VaxjjVcH6q4cosKM
+const API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
 
 const responses = {
 
