@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Container, ListGroup, Table } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { collection, getDocs } from "firebase/firestore";
 import { database } from "../firebase/index";
-import { useTable, useSortBy } from "react-table";
+import SortableTable from "../components/SortableTable";
 
 function RestaurantsPage() {
   const [places, setPlaces] = useState([]);
@@ -37,11 +37,6 @@ function RestaurantsPage() {
     []
   );
 
-  const tableInstance = useTable({ columns, data }, useSortBy);
-
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    tableInstance;
-
   useEffect(() => {
     async function getPlaces() {
       const placesRef = collection(database, "places");
@@ -58,40 +53,7 @@ function RestaurantsPage() {
   return (
     <Container>
       <h1>Matställen</h1>
-      <Table {...getTableProps()}>
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                  {column.render("Header")}{" "}
-                  <span>
-                    {column.isSorted
-                      ? column.isSortedDesc
-                        ? " 🔽"
-                        : " 🔼"
-                      : ""}
-                  </span>
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return (
-                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </Table>
+      <SortableTable columns={columns} data={data} />
     </Container>
   );
 }

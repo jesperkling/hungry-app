@@ -1,24 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useAuthContext } from "../contexts/Authentication";
-import { useTable, useSortBy } from "react-table";
-import { Container, Table } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { FaUserCircle } from "react-icons/fa";
+import SortableTable from "../components/SortableTable";
 
 function AdminPage() {
   const [data, setData] = useState([]);
   const { getAllUsers } = useAuthContext();
-  const columns = React.useMemo(
+  const columns = useMemo(
     () => [
       {
         Header: "Profile Picture",
         accessor: "profilePicture",
         Cell: ({ cell: { value } }) => (
-          <div className="profile-picture-cell">
+          <div>
             {value ? (
               <img
                 src={value}
                 alt="Profile"
-                className="profile-picture"
                 style={{ width: "50px", height: "50px" }}
               />
             ) : (
@@ -50,11 +49,6 @@ function AdminPage() {
     []
   );
 
-  const tableInstance = useTable({ columns, data }, useSortBy);
-
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    tableInstance;
-
   useEffect(() => {
     async function fetchData() {
       const users = await getAllUsers();
@@ -67,6 +61,7 @@ function AdminPage() {
           admin: users.admin,
         }));
         setData(userData);
+        console.log(userData);
       }
     }
     fetchData();
@@ -75,40 +70,7 @@ function AdminPage() {
   return (
     <Container>
       <h1 className="text-center">Admin Page</h1>
-      <Table className="" {...getTableProps()}>
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                  {column.render("Header")}{" "}
-                  <span>
-                    {column.isSorted
-                      ? column.isSortedDesc
-                        ? " 🔽"
-                        : " 🔼"
-                      : ""}
-                  </span>
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return (
-                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </Table>
+      <SortableTable columns={columns} data={data} />
     </Container>
   );
 }

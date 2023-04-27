@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Container, Button, ListGroup, Table } from "react-bootstrap";
+import { Container, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import CreateForm from "../components/CreateForm";
 import { collection, getDocs } from "@firebase/firestore";
 import { database } from "../firebase";
-import { useTable, useSortBy } from "react-table";
 import { AiFillEdit } from "react-icons/ai";
+import SortableTable from "../components/SortableTable";
 
 function EditPage() {
   const [createPlace, setCreatePlace] = useState(false);
@@ -44,11 +44,6 @@ function EditPage() {
     ],
     []
   );
-
-  const tableInstance = useTable({ columns, data }, useSortBy);
-
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    tableInstance;
 
   const handleCreatePlace = () => {
     setCreatePlace(true);
@@ -93,46 +88,7 @@ function EditPage() {
         {editPlace && (
           <div className="text-center">
             <h1>Redigera matställe</h1>
-            <Table {...getTableProps()}>
-              <thead>
-                {headerGroups.map((headerGroup) => (
-                  <tr {...headerGroup.getHeaderGroupProps()}>
-                    {headerGroup.headers.map((column) => (
-                      <th
-                        {...column.getHeaderProps(
-                          column.getSortByToggleProps()
-                        )}
-                      >
-                        {column.render("Header")}{" "}
-                        <span>
-                          {column.isSorted
-                            ? column.isSortedDesc
-                              ? " 🔽"
-                              : " 🔼"
-                            : ""}
-                        </span>
-                      </th>
-                    ))}
-                  </tr>
-                ))}
-              </thead>
-              <tbody {...getTableBodyProps()}>
-                {rows.map((row) => {
-                  prepareRow(row);
-                  return (
-                    <tr {...row.getRowProps()}>
-                      {row.cells.map((cell) => {
-                        return (
-                          <td {...cell.getCellProps()}>
-                            {cell.render("Cell")}
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </Table>
+            <SortableTable columns={columns} data={data} />
           </div>
         )}
       </Container>
