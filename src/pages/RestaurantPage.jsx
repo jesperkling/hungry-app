@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import { Container, Card, ListGroup, ListGroupItem } from "react-bootstrap";
+import { Container, Card } from "react-bootstrap";
 import { doc, getDoc } from "firebase/firestore";
 import { database } from "../firebase/index";
 
