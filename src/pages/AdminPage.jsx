@@ -1,29 +1,29 @@
-import React, { useEffect, useState, useMemo } from "react";
-import { useAuthContext } from "../contexts/Authentication";
+import React, { useMemo } from "react";
 import { Container } from "react-bootstrap";
 import { FaUserCircle } from "react-icons/fa";
 import SortableTable from "../components/SortableTable";
+import useGetUsers from "../hooks/useGetUsers";
 
 function AdminPage() {
-  const [data, setData] = useState([]);
-  const { getAllUsers } = useAuthContext();
+  const { data: users, isLoading } = useGetUsers("users");
+
   const columns = useMemo(
     () => [
       {
         Header: "Profile Picture",
-        accessor: "profilePicture",
-        Cell: ({ cell: { value } }) => (
-          <div>
-            {value ? (
+        accessor: "photoURL",
+        Cell: (tableProps) => (
+          <>
+            {tableProps.row.original.photoURL ? (
               <img
-                src={value}
+                src={tableProps.row.original.photoURL}
                 alt="Profile"
                 style={{ width: "50px", height: "50px" }}
               />
             ) : (
               <FaUserCircle size={32} />
             )}
-          </div>
+          </>
         ),
       },
       {
@@ -49,28 +49,11 @@ function AdminPage() {
     []
   );
 
-  useEffect(() => {
-    async function fetchData() {
-      const users = await getAllUsers();
-      console.log(users);
-      if (users) {
-        const userData = users.map((users) => ({
-          profilePicture: users.photoURL,
-          name: users.name,
-          email: users.email,
-          admin: users.admin,
-        }));
-        setData(userData);
-        console.log(userData);
-      }
-    }
-    fetchData();
-  }, [getAllUsers]);
-
   return (
     <Container>
       <h1 className="text-center">Admin Page</h1>
-      <SortableTable columns={columns} data={data} />
+      {isLoading && <p>Laddar...</p>}
+      <SortableTable columns={columns} data={users} />
     </Container>
   );
 }

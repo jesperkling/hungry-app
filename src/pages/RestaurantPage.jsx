@@ -1,28 +1,11 @@
-import { useState, useEffect } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Container, Card } from "react-bootstrap";
-import { doc, getDoc } from "firebase/firestore";
-import { database } from "../firebase/index";
+import useGetPlace from "../hooks/useGetPlace";
 
 function RestaurantPage() {
   const { id } = useParams();
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const name = searchParams.get("name");
-  const [place, setPlace] = useState(null);
-
-  useEffect(() => {
-    async function getPlace() {
-      const placeRef = doc(database, "places", id);
-      const docSnap = await getDoc(placeRef);
-      if (docSnap.exists()) {
-        setPlace({ id: docSnap.id, ...docSnap.data() });
-      } else {
-        console.log("Place not found!");
-      }
-    }
-    getPlace();
-  }, [id]);
+  const { data: place, isLoading } = useGetPlace(id);
+  console.log(place);
 
   if (!place) {
     return <Container>Loading...</Container>;
@@ -30,9 +13,10 @@ function RestaurantPage() {
 
   return (
     <Container>
+      {isLoading && <p>Laddar...</p>}
       <Card>
         <Card.Body>
-          <Card.Title>{name}</Card.Title>
+          <Card.Title>{place.namn}</Card.Title>
           <Card.Subtitle>
             {place.gatuadress} {place.gatunummer}
           </Card.Subtitle>
