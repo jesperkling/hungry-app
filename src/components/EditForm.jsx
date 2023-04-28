@@ -1,176 +1,223 @@
 import React from "react";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Row, Col, Card } from "react-bootstrap";
+import { updateDoc, doc } from "firebase/firestore";
+import { database } from "../firebase";
+import { useForm } from "react-hook-form";
 
-const EditForm = ({
-  handleOnChange,
-  handleOnSubmit,
-  handleOnReset,
-  formData,
-}) => {
+const EditForm = ({ place }) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
+
+  const onUpdatePlace = async (data) => {
+    await updateDoc(doc(database, "places", place.id), {
+      namn: data.namn,
+      gatuadress: data.gatuadress,
+      ort: data.ort,
+      beskrivning: data.beskrivning,
+      cuisine: data.cuisine,
+      typ: data.typ,
+      utbud: data.utbud,
+      epost: data.epost,
+      hemsida: data.hemsida,
+      telefon: data.telefon,
+      facebook: data.facebook,
+      instagram: data.instagram,
+    });
+    reset(place);
+  };
+
   return (
-    <Form onSubmit={handleOnSubmit}>
-      <Form.Label>Namn</Form.Label>
-      <Form.Group controlId="namn">
-        <Form.Control
-          type="text"
-          name="namn"
-          value={formData.namn || ""}
-          onChange={handleOnChange}
-        />
-      </Form.Group>
+    <Row>
+      <Col>
+        <Card>
+          <Card.Body>
+            <Card.Title>Redigera ställe</Card.Title>
+            <Form onSubmit={handleSubmit(onUpdatePlace)} noValidate>
+              <Row>
+                <Form.Group as={Col} className="mb-3" controlId="namn">
+                  <Form.Label>Namn</Form.Label>
+                  <Form.Control
+                    {...register("namn", {
+                      required: "Namn...",
+                      minLength: {
+                        value: 2,
+                        message: "Namnet måste vara minst 2 tecken långt",
+                      },
+                    })}
+                    defaultValue={place.namn}
+                    size="sm"
+                    type="text"
+                  />
+                  {errors.namn && <p>{errors.namn.message}</p>}
+                </Form.Group>
 
-      <Form.Group controlId="gatuadress">
-        <Form.Label>Gatuadress</Form.Label>
-        <Form.Control
-          type="text"
-          name="gatuadress"
-          value={formData.gatuadress || ""}
-          onChange={handleOnChange}
-        />
-      </Form.Group>
+                <Form.Group as={Col} className="mb-3" controlId="telefon">
+                  <Form.Label>Telefonnummer</Form.Label>
+                  <Form.Control
+                    {...register("telefon", {
+                      minLength: {
+                        value: 5,
+                        message: "Telefonnumret måste vara minst 5 siffror",
+                      },
+                    })}
+                    defaultValue={place.telefon}
+                    size="sm"
+                    type="number"
+                  />
+                </Form.Group>
+              </Row>
+              <Row>
+                <Form.Group as={Col} className="mb-3" controlId="gatuadress">
+                  <Form.Label>Gatuadress</Form.Label>
+                  <Form.Control
+                    {...register("gatuadress", {
+                      required: "Gatuadress...",
+                      minLength: {
+                        value: 2,
+                        message: "Gatuadressen måste vara minst 2 tecken lång",
+                      },
+                    })}
+                    defaultValue={place.gatuadress}
+                    size="sm"
+                    type="text"
+                  />
+                </Form.Group>
+                <Form.Group as={Col} className="mb-3" controlId="ort">
+                  <Form.Label>Ort</Form.Label>
+                  <Form.Control
+                    {...register("ort", {
+                      required: "Ort...",
+                      minLength: {
+                        value: 2,
+                        message: "Orten måste vara minst 2 tecken lång",
+                      },
+                    })}
+                    defaultValue={place.ort}
+                    size="sm"
+                    type="text"
+                  />
+                </Form.Group>
+              </Row>
+              <Form.Group className="mb-3" controlId="beskrivning">
+                <Form.Label>Beskrivning</Form.Label>
+                <Form.Control
+                  {...register("beskrivning", {
+                    required: "Beskrivning...",
+                    minLength: {
+                      value: 2,
+                      message: "Beskrivningen måste vara minst 2 tecken lång",
+                    },
+                  })}
+                  defaultValue={place.beskrivning}
+                  size="sm"
+                  as="textarea"
+                  type="text"
+                />
+              </Form.Group>
 
-      <Form.Group controlId="gatunummer">
-        <Form.Label>Gatunummer</Form.Label>
-        <Form.Control
-          type="number"
-          name="gatunummer"
-          value={formData.gatunummer || ""}
-          onChange={handleOnChange}
-        />
-      </Form.Group>
+              <Form.Group className="mb-3" controlId="cuisine">
+                <Form.Label>Cuisine</Form.Label>
+                <Form.Control
+                  {...register("cuisine", {
+                    required: "Cuisine...",
+                    minLength: {
+                      value: 2,
+                      message: "Cuisine måste vara minst 2 tecken långt",
+                    },
+                  })}
+                  defaultValue={place.cuisine}
+                  size="sm"
+                  type="text"
+                  as="textarea"
+                />
+              </Form.Group>
 
-      <Form.Group controlId="postnummer">
-        <Form.Label>Postnummer</Form.Label>
-        <Form.Control
-          type="number"
-          name="postnummer"
-          value={formData.postnummer || ""}
-          onChange={handleOnChange}
-        />
-      </Form.Group>
+              <Row>
+                <Form.Group as={Col} className="mb-3" controlId="typ">
+                  <Form.Label as="legend">Typ</Form.Label>
+                  <Form.Select
+                    {...register("typ", {
+                      required: "Typ...",
+                    })}
+                    defaultValue={place.typ}
+                  >
+                    <option value="cafe">Café</option>
+                    <option value="restaurang">Restaurang</option>
+                    <option value="snabbmat">Snabbmat</option>
+                    <option value="kiosk-grill">Kiosk/Grill</option>
+                    <option value="foodtruck">Foodtruck</option>
+                  </Form.Select>
+                </Form.Group>
 
-      <Form.Group controlId="ort">
-        <Form.Label>Ort</Form.Label>
-        <Form.Control
-          type="text"
-          name="ort"
-          value={formData.ort || ""}
-          onChange={handleOnChange}
-        />
-      </Form.Group>
+                <Form.Group as={Col} className="mb-3" controlId="utbud">
+                  <Form.Label as="legend">Utbud</Form.Label>
+                  <Form.Select
+                    {...register("utbud", {
+                      required: "Utbud...",
+                    })}
+                    defaultValue={place.utbud}
+                  >
+                    <option value="lunch">Lunch</option>
+                    <option value="after-work">After Work</option>
+                    <option value="middag/Á-la-carte">Middag/Á la carte</option>
+                  </Form.Select>
+                </Form.Group>
+              </Row>
 
-      <Form.Group controlId="beskrivning">
-        <Form.Label>Beskrivning</Form.Label>
-        <Form.Control
-          type="text"
-          name="beskrivning"
-          value={formData.beskrivning || ""}
-          onChange={handleOnChange}
-        />
-      </Form.Group>
+              <Row>
+                <Form.Group as={Col} className="mb-3" controlId="epost">
+                  <Form.Label>E-post</Form.Label>
+                  <Form.Control
+                    {...register("epost")}
+                    defaultValue={place.epost}
+                    size="sm"
+                    type="email"
+                  />
+                </Form.Group>
+              </Row>
+              <Row>
+                <Form.Group as={Col} className="mb-3" controlId="hemsida">
+                  <Form.Label>Hemsida</Form.Label>
+                  <Form.Control
+                    {...register("hemsida")}
+                    defaultValue={place.hemsida}
+                    size="sm"
+                    type="url"
+                  />
+                </Form.Group>
 
-      <Form.Group controlId="cuisine">
-        <Form.Label>Cuisine</Form.Label>
-        <Form.Control
-          type="text"
-          name="cuisine"
-          value={formData.cuisine || ""}
-          onChange={handleOnChange}
-        />
-      </Form.Group>
-
-      <Form.Group controlId="typ">
-        <Form.Label>Typ</Form.Label>
-        <Form.Control
-          as="select"
-          name="typ"
-          value={formData.typ || ""}
-          onChange={handleOnChange}
-        >
-          <option value="restaurang">Restaurang</option>
-          <option value="cafe">Café</option>
-          <option value="bar">Bar</option>
-          <option value="fast-food">Fast Food</option>
-          <option value="food-truck">Food Truck</option>
-        </Form.Control>
-      </Form.Group>
-
-      <Form.Group controlId="utbud">
-        <Form.Label>Utbud</Form.Label>
-        <Form.Control
-          as="select"
-          name="utbud"
-          value={formData.utbud || ""}
-          onChange={handleOnChange}
-        >
-          <option value="lunch">Lunch</option>
-          <option value="after-work">After Work</option>
-          <option value="middag">Middag</option>
-        </Form.Control>
-      </Form.Group>
-
-      <Form.Group controlId="e-post">
-        <Form.Label>E-post</Form.Label>
-        <Form.Control
-          type="email"
-          name="epost"
-          value={formData.epost || ""}
-          onChange={handleOnChange}
-        />
-      </Form.Group>
-
-      <Form.Group controlId="hemsida">
-        <Form.Label>Hemsida</Form.Label>
-        <Form.Control
-          type="text"
-          name="hemsida"
-          value={formData.hemsida || ""}
-          onChange={handleOnChange}
-        />
-      </Form.Group>
-
-      <Form.Group controlId="telefon">
-        <Form.Label>Telefon</Form.Label>
-        <Form.Control
-          type="number"
-          name="telefon"
-          value={formData.telefon || ""}
-          onChange={handleOnChange}
-        />
-      </Form.Group>
-
-      <Form.Group controlId="facebook">
-        <Form.Label>Facebook</Form.Label>
-        <Form.Control
-          type="text"
-          name="facebook"
-          value={formData.facebook || ""}
-          onChange={handleOnChange}
-        />
-      </Form.Group>
-
-      <Form.Group controlId="instagram">
-        <Form.Label>Instagram</Form.Label>
-        <Form.Control
-          type="text"
-          name="instagram"
-          value={formData.instagram || ""}
-          onChange={handleOnChange}
-        />
-      </Form.Group>
-
-      <Button className="m-2" variant="primary" type="submit">
-        Spara
-      </Button>
-      <Button
-        onClick={handleOnReset}
-        className="m-2"
-        variant="danger"
-        type="reset"
-      >
-        Ångra
-      </Button>
-    </Form>
+                <Form.Group as={Col} className="mb-3" controlId="facebook">
+                  <Form.Label>Facebook</Form.Label>
+                  <Form.Control
+                    {...register("facebook")}
+                    defaultValue={place.facebook}
+                    size="sm"
+                    type="url"
+                  />
+                </Form.Group>
+                <Form.Group as={Col} className="mb-3" controlId="instagram">
+                  <Form.Label>Instagram</Form.Label>
+                  <Form.Control
+                    {...register("instagram")}
+                    defaultValue={place.instagram}
+                    size="sm"
+                    type="url"
+                  />
+                </Form.Group>
+              </Row>
+              <Button type="submit">Spara</Button>
+              <Button onClick={reset} type="cancel">
+                Ångra
+              </Button>
+            </Form>
+          </Card.Body>
+        </Card>
+      </Col>
+    </Row>
   );
 };
 

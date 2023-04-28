@@ -1,224 +1,186 @@
 import React, { useState } from "react";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Col, Row } from "react-bootstrap";
 import { collection, addDoc } from "firebase/firestore";
 import { database } from "../firebase";
 import { useAuthContext } from "../contexts/Authentication";
+import { useForm } from "react-hook-form";
+import GMapsAPI from "../services/GMapsAPI";
 
 const CreateForm = () => {
-  const { currentUser } = useAuthContext();
-  const [namn, setNamn] = useState("");
-  const [gatuadress, setGatuadress] = useState("");
-  const [gatunummer, setGatunummer] = useState("");
-  const [postnummer, setPostnummer] = useState("");
-  const [ort, setOrt] = useState("");
-  const [beskrivning, setBeskrivning] = useState("");
-  const [cuisine, setCuisine] = useState("");
-  const [typ, setTyp] = useState("");
-  const [utbud, setUtbud] = useState("");
-  const [epost, setEpost] = useState("");
-  const [hemsida, setHemsida] = useState("");
-  const [telefon, setTelefon] = useState("");
-  const [facebook, setFacebook] = useState("");
-  const [instagram, setInstagram] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    alert("Skapar nytt matställe...");
-
-    const newPlace = {
-      namn,
-      gatuadress,
-      gatunummer,
-      postnummer,
-      ort,
-      beskrivning,
-      cuisine,
-      typ,
-      utbud,
-      epost,
-      hemsida,
-      telefon,
-      facebook,
-      instagram,
-    };
-
-    try {
-      const docRefResult = await addDoc(
-        collection(database, "places"),
-        newPlace
-      );
-      console.log("Document written with ID: ", docRefResult.id);
-    } catch (error) {
-      console.error("Error adding document: ", error);
-    }
-
-    handleReset();
-  };
-
-  const handleReset = () => {
-    setNamn("");
-    setGatuadress("");
-    setGatunummer("");
-    setPostnummer("");
-    setOrt("");
-    setBeskrivning("");
-    setCuisine("");
-    setTyp("");
-    setUtbud("");
-    setEpost("");
-    setHemsida("");
-    setTelefon("");
-    setFacebook("");
-    setInstagram("");
+  const onCreatePlace = async (data) => {
+    await addDoc(collection(database, "places"), {
+      namn: data.namn,
+      gatuadress: data.gatuadress,
+      ort: data.ort,
+      beskrivning: data.beskrivning,
+      cuisine: data.cuisine,
+      typ: data.typ,
+      utbud: data.utbud,
+      epost: data.epost,
+      hemsida: data.hemsida,
+      telefon: data.telefon,
+      facebook: data.facebook,
+      instagram: data.instagram,
+      coordinates: await GMapsAPI.getLatLng(data.gatuadress, data.ort),
+    });
+    reset();
   };
 
   return (
     <div style={{ overflow: "auto" }}>
-      <Form className="p-5" onSubmit={handleSubmit}>
-        <Form.Group className="mb-2" controlId="namn">
+      <Form onSubmit={handleSubmit(onCreatePlace)} noValidate>
+        <Form.Group className="mb-3" controlId="namn">
+          <Form.Label>Namn</Form.Label>
           <Form.Control
+            {...register("namn", {
+              required: "Namn...",
+              minLength: {
+                value: 2,
+                message: "Namnet måste vara minst 2 tecken långt",
+              },
+            })}
+            size="sm"
             type="text"
-            placeholder="Namn..."
-            value={namn}
-            onChange={(e) => setNamn(e.target.value)}
-            required
           />
         </Form.Group>
+        {errors.namn && <p>{errors.namn.message}</p>}
 
-        <Form.Group className="mb-2" controlId="gatuadress">
+        <Form.Group as={Col} className="mb-3" controlId="telefon">
+          <Form.Label>Telefonnummer</Form.Label>
           <Form.Control
-            type="text"
-            placeholder="Gatuadress..."
-            value={gatuadress}
-            onChange={(e) => setGatuadress(e.target.value)}
-            required
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-2" controlId="gatunummer">
-          <Form.Control
+            {...register("telefon", {
+              minLength: {
+                value: 5,
+                message: "Telefonnumret måste vara minst 5 siffror långt",
+              },
+            })}
+            size="sm"
             type="number"
-            placeholder="Gatunummer..."
-            value={gatunummer}
-            onChange={(e) => setGatunummer(e.target.value)}
-            required
           />
         </Form.Group>
 
-        <Form.Group className="mb-2" controlId="postnummer">
+        <Form.Group controlId="gatuadress" className="mb-3">
+          <Form.Label>Gatuadress</Form.Label>
           <Form.Control
-            type="number"
-            placeholder="Postnummer..."
-            value={postnummer}
-            onChange={(e) => setPostnummer(e.target.value)}
-            required
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-2" controlId="ort">
-          <Form.Control
+            {...register("gatuadress", {
+              required: "Gatuadress...",
+              minLength: {
+                value: 2,
+                message: "Gatuadressen måste vara minst 2 tecken långt",
+              },
+            })}
+            size="sm"
             type="text"
-            placeholder="Ort..."
-            value={ort}
-            onChange={(e) => setOrt(e.target.value)}
-            required
           />
         </Form.Group>
 
-        <Form.Group className="mb-2" controlId="beskrivning">
+        <Form.Group as={Col} controlId="ort" className="mb-3">
+          <Form.Label>Ort</Form.Label>
           <Form.Control
+            {...register("ort", {
+              required: "Ort...",
+              minLength: {
+                value: 2,
+                message: "Orten måste vara minst 2 tecken långt",
+              },
+            })}
+            size="sm"
             type="text"
-            placeholder="Beskrivning..."
-            value={beskrivning}
-            onChange={(e) => setBeskrivning(e.target.value)}
-            required
           />
         </Form.Group>
 
-        <Form.Group className="mb-2" controlId="cuisine">
+        <Form.Group controlId="beskrivning" className="mb-3">
+          <Form.Label>Beskrivning</Form.Label>
           <Form.Control
+            {...register("beskrivning", {
+              required: "Beskrivning...",
+              minLength: {
+                value: 2,
+                message: "Beskrivningen måste vara minst 2 tecken långt",
+              },
+            })}
+            size="sm"
+            as="textarea"
             type="text"
-            placeholder="Cuisine..."
-            value={cuisine}
-            onChange={(e) => setCuisine(e.target.value)}
-            required
           />
         </Form.Group>
 
-        <Form.Group className="mb-2" controlId="typ">
-          <Form.Select value={typ} onChange={(e) => setTyp(e.target.value)}>
-            <option>Välj kategori...</option>
-            <option value="restaurang">Restaurang</option>
-            <option value="cafe">Café</option>
-            <option value="fast-food">Fast Food</option>
-            <option value="food-truck">Food Truck</option>
-          </Form.Select>
-        </Form.Group>
-
-        <Form.Group className="mb-2" controlId="utbud">
-          <Form.Select value={utbud} onChange={(e) => setUtbud(e.target.value)}>
-            <option>Välj utbud...</option>
-            <option value="lunch">Lunch</option>
-            <option value="after-work">After Work</option>
-            <option value="middag">Middag</option>
-          </Form.Select>
-        </Form.Group>
-
-        <Form.Group className="mb-2" controlId="e-post">
+        <Form.Group controlId="cuisine" className="mb-3">
+          <Form.Label>Cuisine</Form.Label>
           <Form.Control
-            type="email"
-            placeholder="E-Post..."
-            value={epost}
-            onChange={(e) => setEpost(e.target.value)}
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-2" controlId="hemsida">
-          <Form.Control
+            {...register("cuisine", {
+              required: "Cuisine...",
+              minLength: {
+                value: 2,
+                message: "Cuisine måste vara minst 2 tecken långt",
+              },
+            })}
+            size="sm"
             type="text"
-            placeholder="Hemsida..."
-            value={hemsida}
-            onChange={(e) => setHemsida(e.target.value)}
           />
         </Form.Group>
+        <Row>
+          <Form.Group as={Col} controlId="typ" className="mb-3">
+            <Form.Label as="legend">Typ</Form.Label>
+            <Form.Select
+              {...register("typ", {
+                required: "Typ...",
+              })}
+            >
+              <option value="restaurang">Restaurang</option>
+              <option value="cafe">Café</option>
+              <option value="snabbmat">Snabbmat</option>
+              <option value="kiosk-grill">Kiosk/Grill</option>
+              <option value="foodtruck">Foodtruck</option>
+            </Form.Select>
+          </Form.Group>
 
-        <Form.Group className="mb-2" controlId="telefon">
-          <Form.Control
-            type="number"
-            placeholder="Telefonnummer..."
-            value={telefon}
-            onChange={(e) => setTelefon(e.target.value)}
-          />
-        </Form.Group>
+          <Form.Group as={Col} controlId="utbud" className="mb-3">
+            <Form.Label as="legend">Utbud</Form.Label>
+            <Form.Select
+              {...register("utbud", {
+                required: "Utbud...",
+              })}
+            >
+              <option value="lunch">Lunch</option>
+              <option value="after-work">After Work</option>
+              <option value="middag">Middag/Á la carte</option>
+            </Form.Select>
+          </Form.Group>
+        </Row>
 
-        <Form.Group className="mb-2" controlId="facebook">
-          <Form.Control
-            type="text"
-            placeholder="Facebook..."
-            value={facebook}
-            onChange={(e) => setFacebook(e.target.value)}
-          />
-        </Form.Group>
-        <Form.Group className="mb-2" controlId="instagram">
-          <Form.Control
-            type="text"
-            placeholder="Instagram..."
-            value={instagram}
-            onChange={(e) => setInstagram(e.target.value)}
-          />
-        </Form.Group>
+        <Row>
+          <Form.Group as={Col} controlId="epost" className="mb-3">
+            <Form.Label>E-post</Form.Label>
+            <Form.Control {...register("epost")} size="sm" type="email" />
+          </Form.Group>
+        </Row>
 
-        <Button variant="primary" type="submit" className="m-3">
-          Skapa
-        </Button>
-        <Button
-          onClick={handleReset}
-          variant="danger"
-          type="reset"
-          className="m-3"
-        >
-          Rensa
-        </Button>
+        <Row>
+          <Form.Group as={Col} controlId="hemsida" className="mb-3">
+            <Form.Label>Hemsida</Form.Label>
+            <Form.Control {...register("hemsida")} size="sm" type="text" />
+          </Form.Group>
+
+          <Form.Group as={Col} controlId="facebook" className="mb-3">
+            <Form.Label>Facebook</Form.Label>
+            <Form.Control {...register("facebook")} size="sm" type="text" />
+          </Form.Group>
+
+          <Form.Group as={Col} controlId="instagram" className="mb-3">
+            <Form.Label>Instagram</Form.Label>
+            <Form.Control {...register("instagram")} size="sm" type="text" />
+          </Form.Group>
+        </Row>
+
+        <Button type="submit">Lägg till</Button>
       </Form>
     </div>
   );
