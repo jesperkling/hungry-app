@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Form, Button, Container } from "react-bootstrap";
+import { collection, addDoc } from "firebase/firestore";
+import { database } from "../firebase/index";
 
 const TipsForm = () => {
   const [name, setName] = useState("");
@@ -11,7 +13,7 @@ const TipsForm = () => {
 
     try {
       await addDoc(collection(database, "tips"), {
-        name: name,
+        namn: name,
         email: email,
         tips: tips,
       });
@@ -27,7 +29,7 @@ const TipsForm = () => {
   return (
     <Container>
       <Form className="p-5" onSubmit={handleSubmit}>
-        <Form.Group className="mb-3" controlId="formName">
+        <Form.Group className="mb-3" controlId="namn">
           <Form.Label>Namn</Form.Label>
           <Form.Control
             type="text"
@@ -38,7 +40,7 @@ const TipsForm = () => {
           />
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="formEmail">
+        <Form.Group className="mb-3" controlId="email">
           <Form.Label>Email</Form.Label>
           <Form.Control
             type="email"
@@ -49,7 +51,7 @@ const TipsForm = () => {
           />
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="formTips">
+        <Form.Group className="mb-3" controlId="tips">
           <Form.Label>Tips</Form.Label>
           <Form.Control
             as="textarea"

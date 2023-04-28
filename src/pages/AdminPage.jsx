@@ -111,7 +111,7 @@ function AdminPage() {
                   },
                   {
                     Header: "Name",
-                    accessor: "name",
+                    accessor: "namn",
                   },
                   {
                     Header: "Email",
