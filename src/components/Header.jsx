@@ -41,14 +41,9 @@ function Header() {
                 </Nav.Link>
               )}
               {admin && (
-                <>
-                  <Nav.Link as={NavLink} end to="/admin">
-                    Admin
-                  </Nav.Link>
-                  <Nav.Link as={NavLink} end to="/admin/edit">
-                    Redigera
-                  </Nav.Link>
-                </>
+                <Nav.Link as={NavLink} end to="/admin">
+                  Admin
+                </Nav.Link>
               )}
               {currentUser && (
                 <Nav.Link as={NavLink} end to="/logout">
