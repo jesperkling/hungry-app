@@ -32,6 +32,7 @@ function EditPlacePage() {
       const placeRef = doc(database, "places", id);
       await updateDoc(placeRef, formData);
       console.log("Document successfully updated!");
+      alert("Place updated successfully");
     } catch (error) {
       console.error("Error updating document: ", error);
     }
@@ -42,11 +43,14 @@ function EditPlacePage() {
       <h1>Edit Place</h1>
       {isLoading && <p>Laddar...</p>}
       {place && Object.keys(place).length > 0 && (
-        <EditForm
-          formData={formData}
-          handleOnChange={handleOnChange}
-          handleOnSubmit={handleOnSubmit}
-        />
+        <>
+          <EditForm
+            formData={formData}
+            handleOnChange={handleOnChange}
+            handleOnSubmit={handleOnSubmit}
+            handleOnReset={() => setFormData(place)}
+          />
+        </>
       )}
     </Container>
   );
