@@ -1,60 +1,151 @@
-import React, { useMemo } from "react";
-import { Container } from "react-bootstrap";
-import { FaUserCircle } from "react-icons/fa";
+import React, { useState, useMemo } from "react";
+import { Container, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import CreateForm from "../components/CreateForm";
+import { AiFillEdit } from "react-icons/ai";
 import SortableTable from "../components/SortableTable";
-import useGetUsers from "../hooks/useGetUsers";
+import useGetAllPlaces from "../hooks/useGetAllPlaces";
+import UserForm from "../components/UserForm";
+import useGetTips from "../hooks/useGetTips";
 
 function AdminPage() {
-  const { data: users, isLoading } = useGetUsers("users");
+  const [createPlace, setCreatePlace] = useState(false);
+  const [editPlace, setEditPlace] = useState(false);
+  const [userList, setUserList] = useState(false);
+  const [editTips, setEditTips] = useState(false);
+  const { data: places, isLoading } = useGetAllPlaces("places");
+  const { data: tips } = useGetTips("tips");
 
   const columns = useMemo(
     () => [
       {
-        Header: "Profile Picture",
-        accessor: "photoURL",
-        Cell: (tableProps) => (
-          <>
-            {tableProps.row.original.photoURL ? (
-              <img
-                src={tableProps.row.original.photoURL}
-                alt="Profile"
-                style={{ width: "50px", height: "50px" }}
-              />
-            ) : (
-              <FaUserCircle size={32} />
-            )}
-          </>
-        ),
+        Header: "",
+        accessor: "edit",
+        Cell: ({ row }) =>
+          row.id ? (
+            <Link to={`/admin/edit/${row.original.id}`}>
+              <AiFillEdit />
+            </Link>
+          ) : null,
       },
       {
-        Header: "Name",
-        accessor: "name",
-        sortType: (a, b) => {
-          if (typeof a === "string" && typeof b === "string") {
-            return a.toLowerCase().localeCompare(b.toLowerCase());
-          } else {
-            return 0;
-          }
-        },
+        Header: "Namn",
+        accessor: "namn",
       },
       {
-        Header: "Email",
-        accessor: "email",
+        Header: "Gatuadress",
+        accessor: "gatuadress",
       },
       {
-        Header: "Admin",
-        accessor: (d) => (d.admin ? "Yes" : "No"),
+        Header: "Ort",
+        accessor: "ort",
+      },
+      {
+        Header: "Typ",
+        accessor: "typ",
       },
     ],
     []
   );
 
+  const handleCreatePlace = () => {
+    setCreatePlace(!createPlace);
+    setEditPlace(false);
+    setUserList(false);
+    setEditTips(false);
+  };
+
+  const handleEditPlace = () => {
+    setEditPlace(!editPlace);
+    setCreatePlace(false);
+    setUserList(false);
+    setEditTips(false);
+  };
+
+  const handleUserList = () => {
+    setUserList(!userList);
+    setEditPlace(false);
+    setCreatePlace(false);
+    setEditTips(false);
+  };
+
+  const handleEditTips = () => {
+    setEditTips(!editTips);
+    setEditPlace(false);
+    setCreatePlace(false);
+    setUserList(false);
+  };
+
   return (
-    <Container>
-      <h1 className="text-center">Admin Page</h1>
-      {isLoading && <p>Laddar...</p>}
-      <SortableTable columns={columns} data={users} />
-    </Container>
+    <div style={{ height: "800px", overflowY: "auto" }}>
+      <Container>
+        <h1>Admin Dashboard</h1>
+        <Button onClick={handleUserList} className="m-2">
+          Användarlista
+        </Button>
+        <Button onClick={handleCreatePlace} className="m-2">
+          Skapa nytt matställe
+        </Button>
+        <Button onClick={handleEditPlace} className="m-2">
+          Redigera matställe
+        </Button>
+        <Button onClick={handleEditTips} className="m-2">
+          Se tips
+        </Button>
+
+        {editTips && (
+          <>
+            <h3>Senaste Tipsen</h3>
+            {tips && (
+              <SortableTable
+                columns={[
+                  {
+                    Header: "",
+                    accessor: "edit",
+                    Cell: ({ row }) =>
+                      row.id ? (
+                        <Link to={`/admin/edit/${row.original.id}`}>
+                          <AiFillEdit />
+                        </Link>
+                      ) : null,
+                  },
+                  {
+                    Header: "Name",
+                    accessor: "name",
+                  },
+                  {
+                    Header: "Email",
+                    accessor: "email",
+                  },
+                  {
+                    Header: "Tips",
+                    accessor: "tips",
+                  },
+                ]}
+                data={tips}
+              />
+            )}
+          </>
+        )}
+
+        {userList && <UserForm />}
+
+        {createPlace && (
+          <div className="text-center">
+            <h1>Skapa nytt matställe</h1>
+            <CreateForm />
+          </div>
+        )}
+
+        {editPlace && (
+          <div className="text-center">
+            <h1>Redigera matställe</h1>
+            {isLoading && <p>Laddar...</p>}
+            {places && <SortableTable columns={columns} data={places} />}
+          </div>
+        )}
+      </Container>
+    </div>
   );
 }
 
