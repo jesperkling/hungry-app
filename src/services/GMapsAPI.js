@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
+const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 const getLatLng = async (id) => {
   const res = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${id}&key=${API_KEY}`)
