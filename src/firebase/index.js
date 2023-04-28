@@ -5,7 +5,7 @@ import { getFirestore } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 
 const firebaseConfig = {
-    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
 	authDomain: import.meta.env.VITE_FIREBASE_DOMAIN,
 	projectId: import.meta.env.VITE_FIREBASE_PROJECT,
 	storageBucket: import.meta.env.VITE_FIREBASE_STORAGE,
@@ -21,9 +21,9 @@ const database = getFirestore(app)
 const storage = getStorage(app)
 
 export {
-    app as default,
+  app as default,
 	analytics,
 	auth,
-    database,
-    storage,
+  database,
+  storage,
 }

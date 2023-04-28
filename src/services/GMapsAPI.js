@@ -41,4 +41,4 @@ const responses = {
 }
 
 
-export default responses
+export default responses;
