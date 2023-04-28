@@ -1,17 +1,15 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { Container, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import CreateForm from "../components/CreateForm";
-import { collection, getDocs } from "@firebase/firestore";
-import { database } from "../firebase";
 import { AiFillEdit } from "react-icons/ai";
 import SortableTable from "../components/SortableTable";
+import useGetAllPlaces from "../hooks/useGetAllPlaces";
 
 function EditPage() {
   const [createPlace, setCreatePlace] = useState(false);
   const [editPlace, setEditPlace] = useState(false);
-  const [places, setPlaces] = useState([]);
-  const data = useMemo(() => places, [places]);
+  const { data: places, isLoading } = useGetAllPlaces("places");
 
   const columns = useMemo(
     () => [
@@ -55,19 +53,6 @@ function EditPage() {
     setCreatePlace(false);
   };
 
-  useEffect(() => {
-    const getPlaces = async () => {
-      const placesCollection = collection(database, "places");
-      const placesSnapshot = await getDocs(placesCollection);
-      const placesList = placesSnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setPlaces(placesList);
-    };
-    getPlaces();
-  }, []);
-
   return (
     <div className="text-center" style={{ height: "800px", overflowY: "auto" }}>
       <Container>
@@ -88,7 +73,8 @@ function EditPage() {
         {editPlace && (
           <div className="text-center">
             <h1>Redigera matställe</h1>
-            <SortableTable columns={columns} data={data} />
+            {isLoading && <p>Laddar...</p>}
+            {places && <SortableTable columns={columns} data={places} />}
           </div>
         )}
       </Container>

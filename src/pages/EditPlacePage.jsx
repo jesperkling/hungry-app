@@ -1,42 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { doc, updateDoc, getDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { database } from "../firebase";
-import { Form, Button, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import EditForm from "../components/EditForm";
+import useGetPlace from "../hooks/useGetPlace";
 
 function EditPlacePage() {
   const { id } = useParams();
-  const [formData, setFormData] = useState({
-    namn: "",
-    gatuadress: "",
-    gatunummer: "",
-    postnummer: "",
-    ort: "",
-    beskrivning: "",
-    cuisine: "",
-    typ: "",
-    utbud: "",
-    epost: "",
-    hemsida: "",
-    telefon: "",
-    facebook: "",
-    instagram: "",
-  });
+  const { data: place, isLoading } = useGetPlace(id);
+  const [formData, setFormData] = useState({});
 
   useEffect(() => {
-    const getPlaceData = async () => {
-      const placeRef = doc(database, "places", id);
-      const docSnap = await getDoc(placeRef);
-      if (docSnap.exists()) {
-        const placeData = docSnap.data();
-        setFormData(placeData);
-      } else {
-        console.log("No such document!");
-      }
-    };
-    getPlaceData();
-  }, [id]);
+    if (place) {
+      setFormData(place);
+    }
+  }, [place]);
 
   const handleOnChange = (event) => {
     const { name, value } = event.target;
@@ -61,11 +40,14 @@ function EditPlacePage() {
   return (
     <Container>
       <h1>Edit Place</h1>
-      <EditForm
-        formData={formData}
-        handleOnChange={handleOnChange}
-        handleOnSubmit={handleOnSubmit}
-      />
+      {isLoading && <p>Laddar...</p>}
+      {place && Object.keys(place).length > 0 && (
+        <EditForm
+          formData={formData}
+          handleOnChange={handleOnChange}
+          handleOnSubmit={handleOnSubmit}
+        />
+      )}
     </Container>
   );
 }
