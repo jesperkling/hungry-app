@@ -1,7 +1,12 @@
 import React from "react";
 import { Form, Button } from "react-bootstrap";
 
-const EditForm = ({ handleOnChange, handleOnSubmit, formData }) => {
+const EditForm = ({
+  handleOnChange,
+  handleOnSubmit,
+  handleOnReset,
+  formData,
+}) => {
   return (
     <Form onSubmit={handleOnSubmit}>
       <Form.Label>Namn</Form.Label>
@@ -155,7 +160,15 @@ const EditForm = ({ handleOnChange, handleOnSubmit, formData }) => {
       </Form.Group>
 
       <Button className="m-2" variant="primary" type="submit">
-        Ändra
+        Spara
+      </Button>
+      <Button
+        onClick={handleOnReset}
+        className="m-2"
+        variant="danger"
+        type="reset"
+      >
+        Ångra
       </Button>
     </Form>
   );
