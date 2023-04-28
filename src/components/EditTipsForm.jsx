@@ -9,16 +9,18 @@ import {
 } from "firebase/firestore";
 import { database } from "../firebase/index";
 
-const EditTipsForm = ({ tips, onTipsUpdated, selectedTip }) => {
+const EditTipsForm = ({ selectedTip, tips, onTipsUpdated }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm();
+  console.log(selectedTip);
+  console.log(tips);
 
   const onUpdateTips = async (data) => {
-    await updateDoc(doc(database, "tips", tips.id), {
+    await updateDoc(doc(database, "tips", selectedTip.id), {
       created: serverTimestamp(),
       namn: data.namn,
       email: data.email,
@@ -84,7 +86,7 @@ const EditTipsForm = ({ tips, onTipsUpdated, selectedTip }) => {
             type="text"
             defaultValue={selectedTip.tips}
           />
-          {errors.beskrivning && <p>{errors.beskrivning.message}</p>}
+          {errors.tips && <p>{errors.tips.message}</p>}
         </Form.Group>
 
         <Button variant="primary" type="submit">

@@ -83,6 +83,10 @@ function AdminPage() {
     setSelectedTip(tip);
   };
 
+  const onTipsUpdated = () => {
+    setSelectedTip(null);
+  };
+
   return (
     <div style={{ height: "800px", overflowY: "auto" }}>
       <Container>
@@ -133,7 +137,11 @@ function AdminPage() {
               />
             )}
             {selectedTip && (
-              <EditTipsForm selectedTip={selectedTip} tips={tips} />
+              <EditTipsForm
+                selectedTip={selectedTip}
+                tips={tips}
+                onTipsUpdated={onTipsUpdated}
+              />
             )}
           </>
         )}
