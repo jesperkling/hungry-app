@@ -1,29 +1,22 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import SearchBar from "./SearchBar";
-import { useQuery } from "react-query";
 import MapAPI from "../services/GMapsAPI";
 import UsersLocation from "./UsersLocation";
 import { Col, Row } from "react-bootstrap";
+import useGetAllPlaces from "../hooks/useGetAllPlaces";
 
 const containerStyle = {
   width: "100vw",
   height: "80vh",
 };
 
-const center = {
-  lat: 55.605,
-  lng: 13.0038,
-};
-
 const libraries = ["places"];
 
 const Map = () => {
-  const { data } = useQuery(["places"], MapAPI.getLatLng);
-  // console.log(data);
-
+  const { data: places, isLoading } = useGetAllPlaces("places");
   const { isLoaded } = useLoadScript({
-    id: "google-map-script",
+    // id: "google-map-script",
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_API_KEY,
     libraries: libraries,
   });
@@ -34,12 +27,6 @@ const Map = () => {
     lng: 13.0038,
   });
   const [usersLocation, setUsersLocation] = useState();
-
-  // const onLoad = useCallback(function callback(map) {
-  //   const bounds = new window.google.maps.LatLngBounds(center);
-  //   map.fitBounds(bounds);
-  //   setMap(map);
-  // }, []);
 
   const handleOnSubmit = async (address) => {
     if (!address) {
@@ -73,7 +60,7 @@ const Map = () => {
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={userPosition}
-        zoom={15}
+        zoom={12}
         onLoad={onMapLoad}
         onUnmount={onUnmount}
         options={{
@@ -82,11 +69,33 @@ const Map = () => {
         }}
       >
         <Marker position={userPosition} />
-        {usersLocation && (
-          <Marker
-            position={{ lat: usersLocation.lat, lng: usersLocation.lng }}
-          />
-        )}
+        {usersLocation &&
+          (console.log("usersLocation:", usersLocation),
+          (
+            <Marker
+              position={{ lat: usersLocation.lat, lng: usersLocation.lng }}
+            />
+          ))}
+        {isLoading && <h1>Loading...</h1>}
+        {places &&
+          places.map((place) => {
+            const { coordinates } = place;
+            console.log("coordinates of a place:", coordinates, place);
+
+            if (!coordinates || !coordinates.lat || !coordinates.lng) {
+              return null;
+            }
+
+            return (
+              <Marker
+                key={place.id}
+                position={{
+                  lat: coordinates?.lat,
+                  lng: coordinates?.lng,
+                }}
+              />
+            );
+          })}
         <></>
       </GoogleMap>
       <Row>

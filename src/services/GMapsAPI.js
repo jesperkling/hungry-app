@@ -11,33 +11,18 @@ const getLatLng = async (address) => {
     return coordinates;
 }
 
-const getDetails = async (place) => {
-    const response = await axios.get(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${place}&key=${API_KEY}`);
+const getCity = async (coordinates) => {
+    const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${coordinates.lat},${coordinates.lng}&key=${API_KEY}`);
 
-    const details = response.data.result;
-    console.log(details);
-    return details;
+    const cityInfoArr = response.data?.results[0]?.address_components.filter((component) => component.types.includes('locality')) || component.types.includes('postal_town');
+
+    return cityInfoArr[0]?.long_name;
 }
 
-const getPlaces = async () => {
-    const response = await axios.get(`https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=places&callback=initMap`);
-
-    const places = response.data.results;
-    console.log(places);    
-    return places;
-}
-
-const getLocationWithLatLng = async (lat, lng) => {
-    const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${API_KEY}`);
-
-    return response.data;
-}
 
 const responses = {
     getLatLng,
-    getDetails,
-    getPlaces,
-    getLocationWithLatLng,
+    getCity,
 }
 
 
