@@ -49,6 +49,7 @@ function EditPlacePage() {
             handleOnChange={handleOnChange}
             handleOnSubmit={handleOnSubmit}
             handleOnReset={() => setFormData(place)}
+            place={place}
           />
         </>
       )}

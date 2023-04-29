@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Container, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import CreateForm from "../components/CreateForm";
@@ -7,12 +7,15 @@ import SortableTable from "../components/SortableTable";
 import useGetAllPlaces from "../hooks/useGetAllPlaces";
 import UserForm from "../components/UserForm";
 import useGetTips from "../hooks/useGetTips";
+import EditTipsForm from "../components/EditTipsForm";
 
 function AdminPage() {
   const [createPlace, setCreatePlace] = useState(false);
   const [editPlace, setEditPlace] = useState(false);
   const [userList, setUserList] = useState(false);
   const [editTips, setEditTips] = useState(false);
+  const [selectedTip, setSelectedTip] = useState(null);
+
   const { data: places, isLoading } = useGetAllPlaces("places");
   const { data: tips } = useGetTips("tips");
 
@@ -76,6 +79,14 @@ function AdminPage() {
     setUserList(false);
   };
 
+  const handleSelectTips = (tip) => {
+    setSelectedTip(tip);
+  };
+
+  const onTipsUpdated = () => {
+    setSelectedTip(null);
+  };
+
   return (
     <div style={{ height: "800px", overflowY: "auto" }}>
       <Container>
@@ -104,9 +115,9 @@ function AdminPage() {
                     accessor: "edit",
                     Cell: ({ row }) =>
                       row.id ? (
-                        <Link to={`/admin/edit/${row.original.id}`}>
+                        <button onClick={() => handleSelectTips(row.original)}>
                           <AiFillEdit />
-                        </Link>
+                        </button>
                       ) : null,
                   },
                   {
@@ -123,6 +134,13 @@ function AdminPage() {
                   },
                 ]}
                 data={tips}
+              />
+            )}
+            {selectedTip && (
+              <EditTipsForm
+                selectedTip={selectedTip}
+                tips={tips}
+                onTipsUpdated={onTipsUpdated}
               />
             )}
           </>

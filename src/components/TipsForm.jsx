@@ -1,73 +1,92 @@
-import React, { useState } from "react";
-import { Form, Button, Container } from "react-bootstrap";
-import { collection, addDoc } from "firebase/firestore";
+import React from "react";
+import { Form, Button, Card, Col, Row } from "react-bootstrap";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { database } from "../firebase/index";
+import { useForm } from "react-hook-form";
 
 const TipsForm = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [tips, setTips] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      await addDoc(collection(database, "tips"), {
-        namn: name,
-        email: email,
-        tips: tips,
-      });
-      alert("Tack för ditt tips!");
-      setName("");
-      setEmail("");
-      setTips("");
-    } catch (error) {
-      console.error("Error adding document: ", error);
-    }
+  const onCreateTips = async (data) => {
+    await addDoc(collection(database, "tips"), {
+      created: serverTimestamp(),
+      namn: data.namn,
+      email: data.email,
+      tips: data.tips,
+    });
+    alert("Tack för ditt tips!");
+    reset();
   };
 
   return (
-    <Container>
-      <Form className="p-5" onSubmit={handleSubmit}>
-        <Form.Group className="mb-3" controlId="namn">
-          <Form.Label>Namn</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Ditt namn..."
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </Form.Group>
+    <Row>
+      <Col>
+        <Card>
+          <Card.Body>
+            <Row>
+              <Col>
+                <Card.Title>Har du ett tips?</Card.Title>
+              </Col>
+              <Card.Text>Skicka gärna in ditt tips till oss.</Card.Text>
+            </Row>
 
-        <Form.Group className="mb-3" controlId="email">
-          <Form.Label>Email</Form.Label>
-          <Form.Control
-            type="email"
-            placeholder="Din email..."
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </Form.Group>
+            <Form onSubmit={handleSubmit(onCreateTips)} noValidate>
+              <Form.Group className="mb-3" controlId="namn">
+                <Form.Label>Namn</Form.Label>
+                <Form.Control
+                  {...register("namn", {
+                    required: "Namn...",
+                    minLength: {
+                      value: 2,
+                      message: "Namnet måste vara minst 2 tecken långt",
+                    },
+                  })}
+                  size="sm"
+                  type="text"
+                />
+                {errors.namn && <p>{errors.namn.message}</p>}
+              </Form.Group>
 
-        <Form.Group className="mb-3" controlId="tips">
-          <Form.Label>Tips</Form.Label>
-          <Form.Control
-            as="textarea"
-            rows={3}
-            placeholder="Skriv ditt tips här..."
-            value={tips}
-            onChange={(e) => setTips(e.target.value)}
-            required
-          />
-        </Form.Group>
+              <Form.Group className="mb-3" controlId="email">
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  {...register("email", {
+                    required: "Email...",
+                    minLength: {
+                      value: 2,
+                      message: "Email måste vara minst 2 tecken långt",
+                    },
+                  })}
+                  size="sm"
+                  type="email"
+                />
+              </Form.Group>
 
-        <Button variant="danger" type="submit">
-          Skicka in
-        </Button>
-      </Form>
-    </Container>
+              <Form.Group className="mb-3" controlId="tips">
+                <Form.Label>Tips</Form.Label>
+                <Form.Control
+                  {...register("tips", {
+                    required: "Tips...",
+                    minLength: {
+                      value: 2,
+                      message: "Tips måste vara minst 2 tecken långt",
+                    },
+                  })}
+                  size="sm"
+                  type="text"
+                />
+              </Form.Group>
+              <Button type="submit">Skicka</Button>
+            </Form>
+          </Card.Body>
+        </Card>
+      </Col>
+    </Row>
   );
 };
 
