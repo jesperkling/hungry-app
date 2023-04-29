@@ -33,14 +33,13 @@ const Map = () => {
   });
   const [usersLocation, setUsersLocation] = useState();
   const [selectedPlace, setSelectedPlace] = useState(null);
-  const [filteredPlaces, setFilteredPlaces] = useState([]);
+  const [filteredPlaces, setFilteredPlaces] = useState();
 
   const handleOnSubmit = async (address) => {
     if (!address) {
       return;
     }
     const coordinates = await MapAPI.getLatLng(address);
-    console.log(coordinates);
     map?.panTo(coordinates);
     setUserPosition(coordinates);
   };
@@ -55,7 +54,6 @@ const Map = () => {
     setUsersLocation({ lat, lng });
     mapRef?.current.panTo({ lat, lng });
     mapRef?.current.setZoom(15);
-    console.log(lat, lng);
   }, []);
 
   const onMarkerClick = (place) => {
@@ -70,6 +68,12 @@ const Map = () => {
     setMap(null);
   }, []);
 
+  useEffect(() => {
+    if (places) {
+      setFilteredPlaces(places);
+    }
+  }, [places]);
+
   const onFilter = (selectedType, selectedOffer) => {
     // Filtering logic based on selectedType and selectedOffer
     const filteredPlaces = places.filter((place) => {
@@ -81,12 +85,11 @@ const Map = () => {
       }
       return true;
     });
-    console.log(filteredPlaces);
     setFilteredPlaces(filteredPlaces);
   };
 
   const onClearFilters = () => {
-    setFilteredPlaces([]);
+    setFilteredPlaces(places);
   };
 
   return isLoaded ? (
@@ -104,53 +107,28 @@ const Map = () => {
       >
         {isLoading && <h1>Loading...</h1>}
 
-        {filteredPlaces.length === 0
-          ? null
-          : (filteredPlaces.length === 0 ? places : filteredPlaces).map(
-              (place) => {
-                const { coordinates } = place;
-
-                if (!coordinates || !coordinates.lat || !coordinates.lng) {
-                  return null;
-                }
-
-                return (
-                  <Marker
-                    key={place.id}
-                    onClick={() => onMarkerClick(place)}
-                    position={{
-                      lat: coordinates?.lat,
-                      lng: coordinates?.lng,
-                    }}
-                  />
-                );
-              }
-            )}
-        {selectedPlace &&
-          (console.log(selectedPlace),
-          (
-            <InfoWindow
-              position={{
-                lat: selectedPlace.coordinates.lat,
-                lng: selectedPlace.coordinates.lng,
-              }}
-              onCloseClick={onInfoWindowClose}
-            >
-              <div>
-                <h2>{selectedPlace.namn}</h2>
-                <p>{selectedPlace.beskrivning}</p>
-                <p>
-                  {selectedPlace.gatuadress}
-                  {", "} {selectedPlace.ort}
-                </p>
-              </div>
-            </InfoWindow>
-          ))}
+        {selectedPlace && (
+          <InfoWindow
+            position={{
+              lat: selectedPlace.coordinates.lat,
+              lng: selectedPlace.coordinates.lng,
+            }}
+            onCloseClick={onInfoWindowClose}
+          >
+            <div>
+              <h2>{selectedPlace.namn}</h2>
+              <p>{selectedPlace.beskrivning}</p>
+              <p>
+                {selectedPlace.gatuadress}
+                {", "} {selectedPlace.ort}
+              </p>
+            </div>
+          </InfoWindow>
+        )}
 
         {filteredPlaces &&
           filteredPlaces.map((place) => {
             const { coordinates } = place;
-            console.log(place);
 
             if (!coordinates || !coordinates.lat || !coordinates.lng) {
               return null;
