@@ -60,7 +60,7 @@ const Map = () => {
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={userPosition}
-        zoom={12}
+        zoom={13}
         onLoad={onMapLoad}
         onUnmount={onUnmount}
         options={{
@@ -68,19 +68,10 @@ const Map = () => {
           mapTypeControl: false,
         }}
       >
-        <Marker position={userPosition} />
-        {usersLocation &&
-          (console.log("usersLocation:", usersLocation),
-          (
-            <Marker
-              position={{ lat: usersLocation.lat, lng: usersLocation.lng }}
-            />
-          ))}
         {isLoading && <h1>Loading...</h1>}
         {places &&
           places.map((place) => {
             const { coordinates } = place;
-            console.log("coordinates of a place:", coordinates, place);
 
             if (!coordinates || !coordinates.lat || !coordinates.lng) {
               return null;
@@ -89,6 +80,7 @@ const Map = () => {
             return (
               <Marker
                 key={place.id}
+                onClick={() => console.log("You clicked me!", place.id)}
                 position={{
                   lat: coordinates?.lat,
                   lng: coordinates?.lng,
