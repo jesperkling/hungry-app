@@ -33,6 +33,7 @@ const Map = () => {
   });
   const [usersLocation, setUsersLocation] = useState();
   const [selectedPlace, setSelectedPlace] = useState(null);
+  const [filteredPlaces, setFilteredPlaces] = useState([]);
 
   const handleOnSubmit = async (address) => {
     if (!address) {
@@ -69,6 +70,25 @@ const Map = () => {
     setMap(null);
   }, []);
 
+  const onFilter = (selectedType, selectedOffer) => {
+    // Filtering logic based on selectedType and selectedOffer
+    const filteredPlaces = places.filter((place) => {
+      if (
+        (selectedType && selectedType !== place.typ) ||
+        (selectedOffer && selectedOffer !== place.utbud)
+      ) {
+        return false;
+      }
+      return true;
+    });
+    console.log(filteredPlaces);
+    setFilteredPlaces(filteredPlaces);
+  };
+
+  const onClearFilters = () => {
+    setFilteredPlaces([]);
+  };
+
   return isLoaded ? (
     <>
       <GoogleMap
@@ -83,25 +103,29 @@ const Map = () => {
         }}
       >
         {isLoading && <h1>Loading...</h1>}
-        {places &&
-          places.map((place) => {
-            const { coordinates } = place;
 
-            if (!coordinates || !coordinates.lat || !coordinates.lng) {
-              return null;
-            }
+        {filteredPlaces.length === 0
+          ? null
+          : (filteredPlaces.length === 0 ? places : filteredPlaces).map(
+              (place) => {
+                const { coordinates } = place;
 
-            return (
-              <Marker
-                key={place.id}
-                onClick={() => onMarkerClick(place)}
-                position={{
-                  lat: coordinates?.lat,
-                  lng: coordinates?.lng,
-                }}
-              />
-            );
-          })}
+                if (!coordinates || !coordinates.lat || !coordinates.lng) {
+                  return null;
+                }
+
+                return (
+                  <Marker
+                    key={place.id}
+                    onClick={() => onMarkerClick(place)}
+                    position={{
+                      lat: coordinates?.lat,
+                      lng: coordinates?.lng,
+                    }}
+                  />
+                );
+              }
+            )}
         {selectedPlace &&
           (console.log(selectedPlace),
           (
@@ -122,11 +146,36 @@ const Map = () => {
               </div>
             </InfoWindow>
           ))}
+
+        {filteredPlaces &&
+          filteredPlaces.map((place) => {
+            const { coordinates } = place;
+            console.log(place);
+
+            if (!coordinates || !coordinates.lat || !coordinates.lng) {
+              return null;
+            }
+
+            return (
+              <Marker
+                key={place.id}
+                onClick={() => onMarkerClick(place)}
+                position={{
+                  lat: coordinates?.lat,
+                  lng: coordinates?.lng,
+                }}
+              />
+            );
+          })}
         <></>
       </GoogleMap>
       <Row>
         <Col className="d-flex">
-          <SearchBar onSubmit={handleOnSubmit} />
+          <SearchBar
+            onSubmit={handleOnSubmit}
+            onFilter={onFilter}
+            onClearFilters={onClearFilters}
+          />
           <UsersLocation usersLocation={panToLocation} />
         </Col>
       </Row>

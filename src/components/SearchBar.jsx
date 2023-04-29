@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import {
   Button,
   ButtonGroup,
@@ -13,18 +13,36 @@ import {
 import { Autocomplete } from "@react-google-maps/api";
 import { FaSearch } from "react-icons/fa";
 
-const SearchBar = ({ onSubmit }) => {
+const SearchBar = ({ onSubmit, onFilter, onClearFilters }) => {
   const searchRef = useRef();
+  const [selectedType, setSelectedType] = useState(null);
+  const [selectedOffer, setSelectedOffer] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("finding a place");
+
     if (!searchRef.current.value) {
       return;
     }
     onSubmit(searchRef.current.value);
-    console.log(searchRef.current.value);
   };
+
+  const handleTypeFilter = (value) => {
+    setSelectedType(value);
+    onFilter(value, selectedOffer);
+  };
+
+  const handleOfferFilter = (value) => {
+    setSelectedOffer(value);
+    onFilter(selectedType, value);
+  };
+
+  const handleClearFilters = () => {
+    setSelectedType(null);
+    setSelectedOffer(null);
+    onClearFilters();
+  };
+
   return (
     <>
       <Row>
@@ -54,12 +72,13 @@ const SearchBar = ({ onSubmit }) => {
               title="Typ av matställe"
               variant="light"
               className="border"
+              onSelect={handleTypeFilter}
             >
-              <Dropdown.Item href="#">Café</Dropdown.Item>
-              <Dropdown.Item href="#">Restaurang</Dropdown.Item>
-              <Dropdown.Item href="#">Snabbmat</Dropdown.Item>
-              <Dropdown.Item href="#">Kiosk/Grill</Dropdown.Item>
-              <Dropdown.Item href="#">Foodtruck</Dropdown.Item>
+              <Dropdown.Item eventKey="cafe">Café</Dropdown.Item>
+              <Dropdown.Item eventKey="restaurang">Restaurang</Dropdown.Item>
+              <Dropdown.Item eventKey="snabbmat">Snabbmat</Dropdown.Item>
+              <Dropdown.Item eventKey="kiosk/grill">Kiosk/Grill</Dropdown.Item>
+              <Dropdown.Item eventKey="foodtruck">Foodtruck</Dropdown.Item>
             </DropdownButton>
           </ButtonGroup>
 
@@ -69,12 +88,21 @@ const SearchBar = ({ onSubmit }) => {
               title="Utbud"
               variant="light"
               className="border"
+              onSelect={handleOfferFilter}
             >
-              <Dropdown.Item href="#">Lunch</Dropdown.Item>
-              <Dropdown.Item href="#">After Work</Dropdown.Item>
-              <Dropdown.Item href="#">Middag</Dropdown.Item>
+              <Dropdown.Item eventKey="lunch">Lunch</Dropdown.Item>
+              <Dropdown.Item eventKey="after work">After Work</Dropdown.Item>
+              <Dropdown.Item eventKey="middag">Middag</Dropdown.Item>
             </DropdownButton>
           </ButtonGroup>
+
+          <Button
+            variant="light"
+            className="border"
+            onClick={handleClearFilters}
+          >
+            Rensa filter
+          </Button>
         </Col>
       </Row>
     </>
