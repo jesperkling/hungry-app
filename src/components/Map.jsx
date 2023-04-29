@@ -1,5 +1,10 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
-import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
+import {
+  GoogleMap,
+  Marker,
+  useLoadScript,
+  InfoWindow,
+} from "@react-google-maps/api";
 import SearchBar from "./SearchBar";
 import MapAPI from "../services/GMapsAPI";
 import UsersLocation from "./UsersLocation";
@@ -27,6 +32,7 @@ const Map = () => {
     lng: 13.0038,
   });
   const [usersLocation, setUsersLocation] = useState();
+  const [selectedPlace, setSelectedPlace] = useState(null);
 
   const handleOnSubmit = async (address) => {
     if (!address) {
@@ -50,6 +56,14 @@ const Map = () => {
     mapRef?.current.setZoom(15);
     console.log(lat, lng);
   }, []);
+
+  const onMarkerClick = (place) => {
+    setSelectedPlace(place);
+  };
+
+  const onInfoWindowClose = () => {
+    setSelectedPlace(null);
+  };
 
   const onUnmount = useCallback(function callback(map) {
     setMap(null);
@@ -80,7 +94,7 @@ const Map = () => {
             return (
               <Marker
                 key={place.id}
-                onClick={() => console.log("You clicked me!", place.id)}
+                onClick={() => onMarkerClick(place)}
                 position={{
                   lat: coordinates?.lat,
                   lng: coordinates?.lng,
@@ -88,6 +102,26 @@ const Map = () => {
               />
             );
           })}
+        {selectedPlace &&
+          (console.log(selectedPlace),
+          (
+            <InfoWindow
+              position={{
+                lat: selectedPlace.coordinates.lat,
+                lng: selectedPlace.coordinates.lng,
+              }}
+              onCloseClick={onInfoWindowClose}
+            >
+              <div>
+                <h2>{selectedPlace.namn}</h2>
+                <p>{selectedPlace.beskrivning}</p>
+                <p>
+                  {selectedPlace.gatuadress}
+                  {", "} {selectedPlace.ort}
+                </p>
+              </div>
+            </InfoWindow>
+          ))}
         <></>
       </GoogleMap>
       <Row>
