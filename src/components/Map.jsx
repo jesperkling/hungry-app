@@ -60,9 +60,27 @@ const Map = () => {
     setSelectedPlace(place);
   };
 
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setUsersLocation({ lat: latitude, lng: longitude });
+          setUserPosition({ lat: latitude, lng: longitude });
+        },
+        () => null
+      );
+    }
+  }, []);
+
   const getGoogleMapsDirectionsLink = (place) => {
     const { coordinates } = place;
     const { lat, lng } = coordinates;
+
+    if (!usersLocation || !usersLocation.lat || !usersLocation.lng) {
+      return "";
+    }
+
     const url = `https://www.google.com/maps/dir/?api=1&origin=${usersLocation.lat},${usersLocation.lng}&destination=${lat},${lng}`;
     return url;
   };
