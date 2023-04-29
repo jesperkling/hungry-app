@@ -60,6 +60,13 @@ const Map = () => {
     setSelectedPlace(place);
   };
 
+  const getGoogleMapsDirectionsLink = (place) => {
+    const { coordinates } = place;
+    const { lat, lng } = coordinates;
+    const url = `https://www.google.com/maps/dir/?api=1&origin=${usersLocation.lat},${usersLocation.lng}&destination=${lat},${lng}`;
+    return url;
+  };
+
   const onInfoWindowClose = () => {
     setSelectedPlace(null);
   };
@@ -122,6 +129,13 @@ const Map = () => {
                 {selectedPlace.gatuadress}
                 {", "} {selectedPlace.ort}
               </p>
+              <a
+                href={getGoogleMapsDirectionsLink(selectedPlace)}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Hitta hit
+              </a>
             </div>
           </InfoWindow>
         )}
@@ -154,7 +168,10 @@ const Map = () => {
             onFilter={onFilter}
             onClearFilters={onClearFilters}
           />
-          <UsersLocation usersLocation={panToLocation} />
+          <UsersLocation
+            usersLocation={panToLocation}
+            userPosition={userPosition}
+          />
         </Col>
       </Row>
     </>
