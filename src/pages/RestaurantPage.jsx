@@ -2,10 +2,10 @@ import { useParams } from "react-router-dom";
 import { Container, Card, Row } from "react-bootstrap";
 import { ListGroup } from "react-bootstrap";
 import useGetPlace from "../hooks/useGetPlace";
-const facebook = "/fb-logo.svg";
-const instagram = "/instagram-logo.svg";
-const hemsida = "/website.svg";
-const email = "/email.svg";
+import facebook from "/fb-logo.svg";
+import instagram from "/instagram-logo.svg";
+import hemsida from "/website.svg";
+import email from "/email.svg";
 
 function RestaurantPage() {
   const { id } = useParams();
