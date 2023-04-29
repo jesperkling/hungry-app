@@ -2,6 +2,10 @@ import { useParams } from "react-router-dom";
 import { Container, Card, Row } from "react-bootstrap";
 import { ListGroup } from "react-bootstrap";
 import useGetPlace from "../hooks/useGetPlace";
+import facebook from "../assets/images/fb-logo.svg";
+import instagram from "../assets/images/instagram-logo.svg";
+import hemsida from "../assets/images/website.svg";
+import email from "../assets/images/email.svg";
 
 function RestaurantPage() {
   const { id } = useParams();
@@ -39,7 +43,7 @@ function RestaurantPage() {
                   rel="noreferrer"
                 >
                   <img
-                    src="../src/assets/images/website.svg"
+                    src={hemsida}
                     alt="website"
                     style={{ width: "32px", height: "32px" }}
                   />
@@ -52,7 +56,7 @@ function RestaurantPage() {
                   rel="noreferrer"
                 >
                   <img
-                    src="../src/assets/images/fb-logo.svg"
+                    src={facebook}
                     alt="facebook"
                     style={{ width: "32px", height: "32px" }}
                   />
@@ -65,7 +69,7 @@ function RestaurantPage() {
                   rel="noreferrer"
                 >
                   <img
-                    src="../src/assets/images/instagram-logo.svg"
+                    src={instagram}
                     alt="instagram"
                     style={{ width: "32px", height: "32px" }}
                   />
@@ -78,7 +82,7 @@ function RestaurantPage() {
                   rel="noreferrer"
                 >
                   <img
-                    src="../src/assets/images/email.svg"
+                    src={email}
                     alt="email"
                     style={{ width: "32px", height: "32px" }}
                   />

@@ -1,6 +1,7 @@
 import React from "react";
 import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import backgroundImage from "../assets/images/bild-4.jpg";
 
 function HomePage() {
   return (
@@ -8,7 +9,7 @@ function HomePage() {
       <Row
         className="justify-content-center align-items-center"
         style={{
-          backgroundImage: 'url("../src/assets/images/bild-4.jpg")',
+          backgroundImage: `url(${backgroundImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center center",
           minHeight: "90vh",
