@@ -69,7 +69,7 @@ const SearchBar = ({ onSubmit, onFilter, onClearFilters }) => {
           <ButtonGroup>
             <DropdownButton
               as={ButtonGroup}
-              title="Typ av matställe"
+              title={selectedType || "Typ av matställe"}
               variant="light"
               className="border"
               onSelect={handleTypeFilter}
@@ -85,7 +85,7 @@ const SearchBar = ({ onSubmit, onFilter, onClearFilters }) => {
           <ButtonGroup>
             <DropdownButton
               as={ButtonGroup}
-              title="Utbud"
+              title={selectedOffer || "Utbud"}
               variant="light"
               className="border"
               onSelect={handleOfferFilter}
