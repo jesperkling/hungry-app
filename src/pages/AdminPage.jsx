@@ -2,12 +2,14 @@ import React, { useState, useMemo, useEffect } from "react";
 import { Container, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import CreateForm from "../components/CreateForm";
-import { AiFillEdit } from "react-icons/ai";
+import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import SortableTable from "../components/SortableTable";
 import useGetAllPlaces from "../hooks/useGetAllPlaces";
 import UserForm from "../components/UserForm";
 import useGetTips from "../hooks/useGetTips";
 import EditTipsForm from "../components/EditTipsForm";
+import { database } from "../firebase/index";
+import { doc, deleteDoc } from "firebase/firestore";
 
 function AdminPage() {
   const [createPlace, setCreatePlace] = useState(false);
@@ -30,6 +32,15 @@ function AdminPage() {
               <AiFillEdit />
             </Link>
           ) : null,
+      },
+      {
+        Header: "",
+        accessor: "delete",
+        Cell: ({ row }) => (
+          <button onClick={() => handleDeleteTip(row.original.id)}>
+            <AiFillDelete />
+          </button>
+        ),
       },
       {
         Header: "Namn",
@@ -79,6 +90,10 @@ function AdminPage() {
     setUserList(false);
   };
 
+  const handleDeleteTip = async (tipsId) => {
+    await deleteDoc(doc(database, "tips", tipsId));
+  };
+
   const handleSelectTips = (tip) => {
     setSelectedTip(tip);
   };
@@ -119,6 +134,15 @@ function AdminPage() {
                           <AiFillEdit />
                         </button>
                       ) : null,
+                  },
+                  {
+                    Header: "",
+                    accessor: "delete",
+                    Cell: ({ row }) => (
+                      <button onClick={() => handleDeleteTip(row.original.id)}>
+                        <AiFillDelete />
+                      </button>
+                    ),
                   },
                   {
                     Header: "Name",
