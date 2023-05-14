@@ -28,8 +28,9 @@ const CreateForm = () => {
       telefon: data.telefon,
       facebook: data.facebook,
       instagram: data.instagram,
-      coordinates: await GMapsAPI.getLatLng(data.gatuadress, data.ort),
+      coordinates: await GMapsAPI.getLatLng(data.gatuadress + data.ort),
     });
+    alert("Matställe tillagt!");
     reset();
   };
 

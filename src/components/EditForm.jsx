@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Form, Button, Row, Col, Card } from "react-bootstrap";
 import { updateDoc, doc } from "firebase/firestore";
 import { database } from "../firebase";
 import { useForm } from "react-hook-form";
+import GMapsAPI from "../services/GMapsAPI";
 
 const EditForm = ({ place }) => {
   const {
@@ -11,6 +12,8 @@ const EditForm = ({ place }) => {
     formState: { errors },
     reset,
   } = useForm();
+
+  const [updatedPlace, setUpdatedPlace] = useState(place);
 
   const onUpdatePlace = async (data) => {
     await updateDoc(doc(database, "places", place.id), {
@@ -26,8 +29,16 @@ const EditForm = ({ place }) => {
       telefon: data.telefon,
       facebook: data.facebook,
       instagram: data.instagram,
+      coordinates: await GMapsAPI.getLatLng(data.gatuadress + data.ort),
     });
-    reset(place);
+
+    setUpdatedPlace({
+      ...updatedPlace,
+      ...data,
+      coordinates: await GMapsAPI.getLatLng(data.gatuadress + data.ort),
+    });
+
+    alert("Matställe uppdaterat!");
   };
 
   return (

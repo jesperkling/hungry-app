@@ -3,11 +3,11 @@ import axios from 'axios';
 axios.defaults.baseURL = 'https://maps.googleapis.com/maps/api';
 const API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
 
-const getLatLng = async (address) => {
-    const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${API_KEY}`);
+const getLatLng = async (address, ort) => {
+    const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&ort=${ort}&key=${API_KEY}`);
 
     const coordinates = response.data?.results[0]?.geometry?.location;
-
+    
     return coordinates;
 }
 
