@@ -31,6 +31,10 @@ function RestaurantsPage() {
         Header: "Utbud",
         accessor: "utbud",
       },
+      {
+        Header: "Ort",
+        accessor: "ort",
+      },
     ],
     []
   );

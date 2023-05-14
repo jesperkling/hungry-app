@@ -144,6 +144,9 @@ const Map = () => {
               <h2>{selectedPlace.namn}</h2>
               <p>{selectedPlace.beskrivning}</p>
               <p>
+                {selectedPlace.typ} - {selectedPlace.utbud}
+              </p>
+              <p>
                 {selectedPlace.gatuadress}
                 {", "} {selectedPlace.ort}
               </p>

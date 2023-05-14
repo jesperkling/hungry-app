@@ -64,6 +64,7 @@ const CreateForm = () => {
             })}
             size="sm"
             type="number"
+            pattern="0\d{4,14}"
           />
         </Form.Group>
 

@@ -23,12 +23,11 @@ function RestaurantPage() {
           <Card.Body>
             <Card.Title>{place.namn}</Card.Title>
             <Card.Subtitle className="mb-2 text-muted">
-              Adress: {place.gatuadress} {place.gatunummer}
+              Adress: {place.gatuadress} {place.gatunummer} {place.ort}
             </Card.Subtitle>
             <ListGroup variant="flush">
               <ListGroup.Item>
-                Telefon:{" "}
-                <a href={`tel: ${place.telefon}`}>+46{place.telefon}</a>
+                Telefon: <a href={`tel: ${place.telefon}`}>{place.telefon}</a>
               </ListGroup.Item>
               <ListGroup.Item>Beskrivning: {place.beskrivning}</ListGroup.Item>
               <ListGroup.Item>Cuisine: {place.cuisine}</ListGroup.Item>
